@@ -1,0 +1,180 @@
+snippet fun "Function definition" !b
+function [ ${2:} ] = ${1:`!p snip.rv = snip.basename`}(${3:})
+	% `!p snip.rv = t[1].upper()` ${4:description}
+	% ${5:`!p
+if t[3]:
+	snip += "\t% ARGUMENTS:"
+	for x in t[3].split(","):
+		snip += "\t%  " + x.strip() + ": "
+if t[2]:
+	snip += "\t% RETURNS:"
+	for x in t[2].split(","):
+		snip += "\t%  " + x.strip() + ": "
+
+	pass`}
+
+	$0
+end
+endsnippet
+
+snippet ifeif "if ... elseif ... end"
+if ${1:%condition}
+	${2:%body}
+elseif ${3:%condition}
+	${4:%body}
+else
+	${5:%body}
+end
+endsnippet
+
+snippet set "set"
+set(${1:get(${2:gca},'${3:PropertyName}')},'${4:PropertyName}',${5:PropertyValue});
+endsnippet
+
+snippet tit "title"
+title('${1}');
+endsnippet
+
+snippet whi "while"
+while ${1:condition}
+	${2:body}
+end	
+endsnippet
+
+snippet xla "xlabel"
+xlabel('${1}');
+endsnippet
+
+snippet xti "xtick"
+set(gca,'XTick',[${2}]);
+endsnippet
+
+snippet yla "ylabel"
+ylabel('${1}');
+endsnippet
+
+snippet yti "ytick"
+set(gca,'YTick',[${2}]);
+endsnippet
+
+snippet zla "zlabel"
+zlabel('${1}');
+endsnippet
+
+snippet ^ "^()"
+^(${1}) ${2}
+endsnippet
+
+snippet case "case"
+case ${2:'${3:string}'}
+	${0}
+endsnippet
+snippet cle "clear"
+clear('${1:all}'${2});
+endsnippet
+
+snippet dsp "disp sprintf"
+disp(sprintf('${1:%s}\\n'${1/([^%]|%%)*(%.)?.*/(?2:, :\);)/}${2}${1/([^%]|%%)*(%.)?.*/(?2:\);)/});
+endsnippet
+
+snippet disp "disp"
+disp('${1:Text}');
+endsnippet
+
+snippet dlmwrite "dlmwrite"
+dlmwrite('${1:filename}.dat', [${2:variables}], ${3:'${4:delimiter}', '${5:\t}'});
+${0}
+endsnippet
+
+snippet el "else"
+else
+	${1:body}
+endsnippet
+
+snippet elif "elseif"
+elseif ${1:condition}
+	${0}
+endsnippet
+
+snippet error "error"
+error('${1:Description}');
+endsnippet
+
+snippet e "exp"
+exp(${1}) ${2}
+endsnippet
+
+snippet fpr "fprintf"
+fprintf(${1:fid}, '${2:%s}\\n'${2/([^%]|%%)*(%.)?.*/(?2:, :\);)/}${3}${2/([^%]|%%)*(%.)?.*/(?2:\);)/}
+endsnippet
+
+snippet get "get"
+get(${1:gca},'${2:PropertyName}');
+endsnippet
+
+snippet griddata "griddata"
+griddata(${1:xx}, ${2:yy}, ${3:zz}, ${4:xi}, ${5:yi}); 
+endsnippet
+
+snippet ife "if … else …end"
+if ${1:condition}
+	${2}
+else
+	${3}
+end
+endsnippet
+
+snippet line "line"
+line(${1:xvector},${2:yvector}${3:,'Color','${4:b}','LineWidth',${5:1},'LineStyle','${6:-}'})
+endsnippet
+
+snippet spr "sprintf"
+sprintf('${1:%s}\\n'${1/([^%]|%%)*(%.)?.*/(?2:, :\);)/}${2}${1/([^%]|%%)*(%.)?.*/(?2:\);)/}
+endsnippet
+
+snippet switch "switch ... case ... otherwise ... end"
+switch ${1:switch_expression}
+	case ${2:case_expression}
+
+	otherwise
+
+end
+endsnippet
+
+snippet war "warning"
+warning('${1:Description}');
+endsnippet
+
+snippet switch "switch … case … end"
+switch ${1:var}
+case ${2:'${3:string}'}
+	${0}
+end
+endsnippet
+
+snippet try "try … catch … end"
+try 
+	${1}
+catch 
+	${0}
+endsnippet
+
+snippet for "for"
+for ${1:i} = ${2:from}:${3:to}
+
+end
+endsnippet
+
+snippet if "if"
+if ${1:condition}
+
+end
+endsnippet
+
+snippet fontsi "fontsize"
+set(gca, 'fontsize', ${1:14});
+endsnippet
+
+snippet fontwei "fontweight"
+set(gca, 'fontweight', '${1:bold}');
+endsnippet
