@@ -1,17 +1,19 @@
-# holman does dotfiles
+# initysteppa does dotfiles
 
 ## dotfiles
 
-Your dotfiles are how you personalize your system. These are mine.
+This is a fork of holmans excellent dotfiles. Personalized for my needs.
 
-I was a little tired of having long alias files and everything strewn about
-(which is extremely common on other dotfiles projects, too). That led to this
-project being much more topic-centric. I realized I could split a lot of things
-up into the main areas I used (Ruby, git, system libraries, and so on), so I
-structured the project accordingly.
+These dotfiles are split into topics, where customizations for each topic goes
+in to their respective folder. Here, things are split into C, git, vim etc.
+
+I use [agnoster theme](http://gist.github.com/agnoster/3712874) from oh-my-zsh,
+as well as vim-powerline, both of which require a [powerline patched
+font](http://github.com/Lokaltog/powerline-fonts). Most vim scripts are 
+installed as git submodules and pathogen is used as vim package manager.
 
 If you're interested in the philosophy behind why projects like these are
-awesome, you might want to [read my post on the
+awesome, you might want to [read holmans post on the
 subject](http://zachholman.com/2010/08/dotfiles-are-meant-to-be-forked/).
 
 ## install
@@ -19,21 +21,17 @@ subject](http://zachholman.com/2010/08/dotfiles-are-meant-to-be-forked/).
 Run this:
 
 ```sh
-git clone https://github.com/holman/dotfiles.git ~/.dotfiles
+git clone http://github.com/holman/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 script/bootstrap
 ```
 
-This will symlink the appropriate files in `.dotfiles` to your home directory.
+This will symlink the appropriate files in `.dotfiles` to your home directory,
+followed by an initialization and update of the git submodules for vim.
 Everything is configured and tweaked within `~/.dotfiles`.
 
 The main file you'll want to change right off the bat is `zsh/zshrc.symlink`,
 which sets up a few paths that'll be different on your particular machine.
-
-`dot` is a simple script that installs some dependencies, sets sane OS X
-defaults, and so on. Tweak this script, and occasionally run `dot` from
-time to time to keep your environment fresh and up-to-date. You can find
-this script in `bin/`.
 
 ## topical
 
@@ -66,22 +64,8 @@ There's a few special files in the hierarchy.
   but still keep those autoloaded files in your home directory. These get
   symlinked in when you run `script/bootstrap`.
 
-## bugs
-
-I want this to work for everyone; that means when you clone it down it should
-work for you even though you may not have `rbenv` installed, for example. That
-said, I do use this as *my* dotfiles, so there's a good chance I may break
-something if I forget to make a check for a dependency.
-
-If you're brand-new to the project and run into any blockers, please
-[open an issue](https://github.com/holman/dotfiles/issues) on this repository
-and I'd love to get it fixed for you!
-
 ## thanks
 
-I forked [Ryan Bates](http://github.com/ryanb)' excellent
-[dotfiles](http://github.com/ryanb/dotfiles) for a couple years before the
-weight of my changes and tweaks inspired me to finally roll my own. But Ryan's
-dotfiles were an easy way to get into bash customization, and then to jump ship
-to zsh a bit later. A decent amount of the code in these dotfiles stem or are
-inspired from Ryan's original project.
+This is a fork of [holmans](http://github.com/holman) dotfiles. A lot of vimrc 
+goodness comes from [sjl's dotfiles](https://bitbucket.org/sjl/dotfiles/),
+which features a vimrc file of almost 2000 lines.
