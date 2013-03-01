@@ -6,7 +6,6 @@
 [user]
         name = AUTHORNAME
         email = AUTHOREMAIL
-        helper = osxkeychain
 [alias]
         co = checkout
         promote = !$ZSH/bin/git-promote
@@ -20,11 +19,14 @@
         ui = true
 [core]
         excludesfile = ~/.gitignore
+        autocrlf = input
         editor = vim
-[apply]
-        whitespace = nowarn
-[mergetool]
-        keepBackup = false
+#[apply]
+        #whitespace = nowarn
+[merge]
+        tool = gvimdiff
+#[mergetool]
+        #keepBackup = false
 [difftool]
         prompt = false
 [help]
