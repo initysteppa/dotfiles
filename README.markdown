@@ -2,7 +2,8 @@
 
 ## dotfiles
 
-This is a fork of holmans excellent dotfiles. Personalized for my needs.
+This is a fork of [holmans excellent dotfiles](http://github.com/holman/dotfiles.git).
+Personalized for my needs.
 
 These dotfiles are split into topics, where customizations for each topic goes
 in to their respective folder. Here, things are split into C, git, vim etc.
@@ -21,7 +22,7 @@ subject](http://zachholman.com/2010/08/dotfiles-are-meant-to-be-forked/).
 Run this:
 
 ```sh
-git clone http://github.com/holman/dotfiles.git ~/.dotfiles
+git clone http://github.com/initysteppa/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 script/bootstrap
 ```
