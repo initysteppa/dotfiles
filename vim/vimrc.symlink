@@ -45,7 +45,7 @@ augroup line_return
         \ endif
 augroup END
 
-" }}}
+" }}} Basic options
 
 " Indent
 set shiftwidth=4
@@ -71,7 +71,7 @@ if !isdirectory(expand(&directory))
 endif
 " }}}
 
-" }}}
+" }}} Backups
 
 " Convenience mappings ---------------------------------------------------- {{{
 " paste toggle
@@ -93,14 +93,14 @@ set pastetoggle=<F2>
 " Select (charwise) the contents of the current line, excluding indentation.
 " Great for pasting Python lines into REPLs.
 nnoremap vv ^vg_
-" }}}
+" }}} Convenience mappings
 
 " Searching and movement -------------------------------------------------- {{{
 " Jump by visual line by default
 "nnoremap j gj
 "nnoremap k gk
 
-" }}}
+" }}} Searching and movement
 
 " Folding ----------------------------------------------------------------- {{{
 set foldlevelstart=0
@@ -141,7 +141,7 @@ function! MyFoldText() " {{{
     return line . '…' . repeat(" ",fillcharcount) . foldedlinecount . '…' . ' '
 endfunction " }}}
 set foldtext=MyFoldText()
-" }}}
+" }}} Folding
 " Filetype-specific ------------------------------------------------------- {{{
 " Vim {{{
 augroup ft_vim
@@ -151,10 +151,21 @@ augroup ft_vim
     au FileType help setlocal textwidth=78
     au BufWinEnter *.txt if &ft == 'help' | wincmd L | endif
 augroup END
-" }}}
-" }}}
+
+augroup ft_tex
+	au!
+	au FileType tex call IMAP('`w', '\omega', 'tex')
+augroup END
+" }}} Vim
+" }}} Filetype-specific
 
 " Plugin settings --------------------------------------------------------- {{{
+" UltiSnips {{{
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+" }}} UltiSnips
+
 " pdflatex {{{
 let g:Tex_CompileRule_pdf = 'latexmk -pdf -f $*'
 let g:Tex_ViewRule_pdf = 'evince'
@@ -163,16 +174,16 @@ let g:Tex_DefaultTargetFormat = 'pdf'
 
 let g:tex_flavor = "latex"
 let g:Tex_ImageDir = '.'
-" }}}
+" }}} pdflatex
 
 " Powerline {{{
 set rtp+=~/.vim/bundle/powerline/powerline/bindings/vim
-" }}}
+" }}} Powerline
 
 " NERDTree {{{
 :nmap \e :NERDTreeToggle<CR>
-" }}}
-" }}}
+" }}} NERDTree
+" }}} Plugin settings
 " Mini-plugins ------------------------------------------------------------ {{{
 " Pulse Line {{{
 
@@ -209,5 +220,5 @@ function! s:Pulse() " {{{
 endfunction " }}}
 command! -nargs=0 Pulse call s:Pulse()
 
-" }}}
-" }}}
+" }}} Pulse Line
+" }}} Mini-plugins
