@@ -26,6 +26,8 @@ set background=dark
 colorscheme inkpot
 " less extreme fold color
 hi Folded         gui=NONE   guifg=#cfcfcd   guibg=#453957
+" switch colors in TODO, so it appears on cursorline
+hi Todo           gui=BOLD   guifg=#d0a060   guibg=#303030
 set guifont=PragmataPro\ for\ Powerline\ 10
 let g:Powerline_symbols="fancy"
 set number
@@ -93,6 +95,10 @@ set pastetoggle=<F2>
 " Select (charwise) the contents of the current line, excluding indentation.
 " Great for pasting Python lines into REPLs.
 nnoremap vv ^vg_
+
+" CDC = Change to Directory of Current file
+command CDC cd %:p:h
+
 " }}} Convenience mappings
 
 " Searching and movement -------------------------------------------------- {{{
