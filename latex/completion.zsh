@@ -1,0 +1,1 @@
+compdef ltxmkpdf='latexmk'
