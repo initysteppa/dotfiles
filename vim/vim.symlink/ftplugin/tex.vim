@@ -1,5 +1,10 @@
 " vimlatex macros
-call IMAP('DDpart', '\frac{\partial <++>}{\partial <++>}<++>', 'tex')
+let g:Tex_Com_pd = "\\pd{<++>}{<++>}<++>"
+let g:Tex_Com_od = "\\od{<++>}{<++>}<++>"
+let g:Tex_Com_md = "\\md{<+f+>}{<+o+>}{<+x+>}{<+n+>}{<+y+>}{<+m+>}<++>"
+let g:Tex_Com_eval = "\\eval{<+f+>}_{<+at+>}<++>"
+let g:Tex_Com_fullfunction = "\\fullfunction{<+f+>}{<+fromR+>}{<+toR+>}{<+arg+>}{<+val+>}<++>"
+
 call IMAP('FRFIG', "\<C-r>=FloatRowFig(2)\<CR>", 'tex')
 
 function! FloatRowFig(cols)
