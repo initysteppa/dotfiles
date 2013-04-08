@@ -31,6 +31,24 @@ function! FloatRowFig(cols)
 		\ )
 endfunction
 
+call IMAP('DISC2DER', "\<C-r>=Discr2ndDer()\<CR>", 'tex')
+function! Discr2ndDer()
+	return IMAP_PutTextWithMovement(
+		\ "\\begin{equation}\<CR>" .
+		\ "\\footnotesize\<CR>" .
+		\ "\\begin{pmatrix}\<CR>" .
+		\ "-2 & 1 & 0 & \\cdots & \\cdots & 0 \\\\\<CR>" .
+		\ "-1 & -2 & 1 & \\ddots & & \\vdots \\\\\<CR>" .
+		\ "0 & \\ddots & \\ddots & \\ddots & \\ddots & \\vdots \\\\\<CR>" .
+		\ "\\vdots & \\ddots & \\ddots & \\ddots & \\ddots & 0 \\\\\<CR>" .
+		\ "\\vdots & & \\ddots & 1 & -2 & 1  \\\\\<CR>" .
+		\ "0 & \\cdots & \\cdots & 0 & 1 & -2\<CR>" .
+		\ "\\end{pmatrix}\<CR>" .
+		\ "\\label{<++>}\<CR>" .
+		\ "\\end{equation}<++>"
+		\ )
+endfunction
+
 " conceal
 set cole=2
 let g:tex_conceal= 'adgm'
