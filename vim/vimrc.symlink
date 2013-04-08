@@ -99,6 +99,12 @@ nnoremap vv ^vg_
 " CDC = Change to Directory of Current file
 command CDC cd %:p:h
 
+" Highlight and match ExtraWhitespaces
+highlight ExtraWhitespace ctermbg=red guibg=#ce4e4e
+" Show trailing whitespace except when typing on line:
+nnoremap <Leader>wn :match ExtraWhitespace /\s\+\%#\@<!$/<CR>
+nnoremap <Leader>wf :match<CR>
+
 " }}} Convenience mappings
 
 " Searching and movement -------------------------------------------------- {{{
