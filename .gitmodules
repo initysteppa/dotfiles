@@ -28,3 +28,6 @@
 [submodule "vim/vim.symlink/bundle/gist-vim"]
 	path = vim/vim.symlink/bundle/gist-vim
 	url = https://github.com/mattn/gist-vim.git
+[submodule "vim/vim.symlink/bundle/javacomplete"]
+	path = vim/vim.symlink/bundle/javacomplete
+	url = https://github.com/vim-scripts/javacomplete.git
