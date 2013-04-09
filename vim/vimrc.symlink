@@ -195,6 +195,9 @@ set rtp+=~/.vim/bundle/powerline/powerline/bindings/vim
 " NERDTree {{{
 :nmap \e :NERDTreeToggle<CR>
 " }}} NERDTree
+" tagbar {{{
+nmap <Leader>t :TagbarToggle<CR>
+" }}} tagbar
 " }}} Plugin settings
 " Mini-plugins ------------------------------------------------------------ {{{
 " Pulse Line {{{

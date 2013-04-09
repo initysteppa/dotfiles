@@ -31,3 +31,6 @@
 [submodule "vim/vim.symlink/bundle/javacomplete"]
 	path = vim/vim.symlink/bundle/javacomplete
 	url = https://github.com/vim-scripts/javacomplete.git
+[submodule "vim/vim.symlink/bundle/tagbar"]
+	path = vim/vim.symlink/bundle/tagbar
+	url = git://github.com/majutsushi/tagbar
