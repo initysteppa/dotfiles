@@ -1,0 +1,2 @@
+#!/bin/sh
+XMODIFIERS=XIM /usr/local/bin/matlab

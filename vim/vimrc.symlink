@@ -28,7 +28,7 @@ colorscheme inkpot
 hi Folded         gui=NONE   guifg=#cfcfcd   guibg=#453957
 " switch colors in TODO, so it appears on cursorline
 hi Todo           gui=BOLD   guifg=#d0a060   guibg=#303030
-set guifont=PragmataPro\ for\ Powerline\ 10
+set guifont=PragmataPro\ 10
 let g:Powerline_symbols="fancy"
 set number
 " Use cursorline and fix ugly yellow
@@ -193,7 +193,7 @@ set rtp+=~/.vim/bundle/powerline/powerline/bindings/vim
 " }}} Powerline
 
 " NERDTree {{{
-:nmap \e :NERDTreeToggle<CR>
+nmap \e :NERDTreeToggle<CR>
 " }}} NERDTree
 " tagbar {{{
 nmap <Leader>t :TagbarToggle<CR>
@@ -237,3 +237,9 @@ command! -nargs=0 Pulse call s:Pulse()
 
 " }}} Pulse Line
 " }}} Mini-plugins
+"  TODO ------------------------------------------------------------------- {{{
+"
+"  highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+"  match OverLength /\%81v.\+/
+"
+"  -------------------------------------------------------------------------}}}
