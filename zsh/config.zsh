@@ -44,6 +44,7 @@ setopt HIST_IGNORE_SPACE # keep a command from history by adding a <space> befor
 # don't expand aliases _before_ completion has finished
 #   like: git comm-[tab]
 setopt complete_aliases
+bindkey -v
 
 zle -N newtab
 
@@ -54,3 +55,6 @@ bindkey '^[[5C' end-of-line
 bindkey '^[[3~' delete-char
 bindkey '^[^N' newtab
 bindkey '^?' backward-delete-char
+
+# Bind backward search to <C-R> also in vi-mode
+bindkey '^R' history-incremental-search-backward
