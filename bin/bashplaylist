@@ -1,0 +1,127 @@
+#!/bin/bash
+#Dependencies: usual gnu utils, ffmpeg or ffprobe
+ 
+#june 07 2012 edited to remove unwanted \ in regex expression which
+#prevented ogg files from being parsed.
+#march 20 2013 edited to accommodate opus files and to fix error in fetching
+#durations, caused by changes in ffprobe.
+ 
+function usage ()
+{
+        printf "\nUSAGE:
+\t$(basename "$0") [options] {-o out} <directory>\n
+OPTIONS:
+\t-p  writes the file names in .m3u with full path\n\
+\t    (default is simple file name without path)\n
+\t-r  recurses through subdirectories and writes file names with
+\t    full path\n
+\t-o <output directory>  (default is target directory)\n
+\t$(basename "$0") finds the audio files in the directory, parses
+\tthe metadata, then writes an extended .m3u playlist\n
+\t$(basename "$0") understands the same files as  your
+\tinstalled version of ffmpeg.\n
+\tIf $(basename "$0") fails please check output directory exists
+\tand is writeable.\n\n"
+}
+ 
+#dump file data;grep metadata relevant to extm3u.
+#extm3u spec states that stated time MUST be equal to or greater than
+#track duration so all times are rounded UP to integer i.e. 38.00 secs
+#becomes 38 seconds but 38.10 secs or 38.95 seconds become 39 seconds.
+function getdata ()
+{
+ffprobe -v quiet -show_format -show_streams "$f">"$DATA"
+ 
+PERF=$(grep -m 1 -i tag:artist "$DATA" |\
+awk -F "=" '{$1="";$0=substr($0,2)}1' |cleantag)
+TIT=$(grep -m 1 -i tag:title "$DATA" |\
+awk -F "=" '{$1="";$0=substr($0,2)}1' |cleantag)
+SEC=$(printf %.2f\\n $(grep -m 1 -i -e "^duration=" "$DATA" |\
+awk -F "=" '{print $2}'))
+SEC=$(printf %0.f\\n $(echo "$SEC+0.5"|bc))
+}
+ 
+#remove problematic characters from metadata.
+function cleantag ()
+{
+        sed 's/[;]/-/g;s/[/]/-/g;s/[<]/-/g;s/[>]/-/g;s/[:]/-/g;s/[|]/-/g'
+}
+ 
+#user options
+while getopts 'o:pr' OPTION
+do
+        case $OPTION in
+        o)      oflag=1
+                oval=$OPTARG
+                ;;
+        p)      pflag=1
+                ;;
+        r)      rflag=1
+                pflag=1
+                ;;
+        esac
+done
+shift $(($OPTIND-1))
+ 
+if [ $# -lt 1 ]; then
+        usage
+        exit 1
+fi
+ 
+#recurse?
+if [ $rflag ]; then
+        DEPTH=''
+        else
+        DEPTH="-maxdepth 1"
+fi
+ 
+for i in "$@" ; do
+#ensure .m3u name is not dot file if script run within target directory.
+PN=00-$(basename "$(readlink -f "$i")").m3u
+ 
+#some simple error checking
+if [ ! -d "$i" ]; then
+        usage
+        exit
+fi
+ 
+#set output destination. Output dir exists and writeable?
+if [ $oflag ]; then
+        if [ ! -d "$oval" -o ! -w "$oval" ]; then
+        usage
+        exit
+        fi
+        PL=$oval/"$PN"
+        else
+        PL="$i"/"$PN"
+fi
+ 
+#create/overwrite .m3u and write extm3u's generic 1st line
+printf "#EXTM3U">"$PL"
+ 
+#find all audio files to be referenced in .m3u
+find "$i" $DEPTH -iregex ".*\(flac\|ape\|wv\|wav\|mpc\|aac\|m4a\|wma\|\
+mp3\|ogg\|oga\|mka\|ac3\|opus\)$" |sort |while read f ; do
+ 
+#use full path or simple names?
+if [ $pflag ]; then
+        FILENAME=$(readlink -f "$f")
+        else
+        FILENAME="${f##*/}"
+fi
+ 
+#where to dump ffprobe's file info
+DATA="${f%.*}"_data
+ 
+#run getdata silently (ffprobe generates much unwanted text)
+getdata>/dev/null 2>&1
+ 
+#write to the playlist, clean up.
+printf "\n#EXTINF:$SEC,$PERF - $TIT\n$FILENAME">>"$PL"
+rm "$DATA"
+done
+ 
+#confirm to user, quit.
+echo "Wrote "$PL""
+done
+exit 0
