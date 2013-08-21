@@ -1,2 +1,3 @@
 set lines=53
 set columns=115
+colorscheme twilight

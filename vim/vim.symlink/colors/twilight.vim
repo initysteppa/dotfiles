@@ -49,6 +49,10 @@ hi Visual guibg=#404040
 "hi Cursor guifg=NONE guibg=#586068
 hi Cursor guibg=#b0d0f0
 
+hi DiffText       gui=NONE   guifg=#ffffcd   guibg=#4a2a4a
+hi DiffChange     gui=NONE   guifg=#ffffcd   guibg=#306b8f
+hi DiffDelete     gui=NONE   guifg=#ffffcd   guibg=#6d3030
+hi DiffAdd        gui=NONE   guifg=#ffffcd   guibg=#306d30
 
 exe 'hi Normal         guifg='.s:white             .' guibg='.s:darkgrey
 exe 'hi Underlined     guifg='.s:white             .' guibg='.s:darkgrey        .' gui=underline'
