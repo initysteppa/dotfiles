@@ -10,9 +10,6 @@
 [submodule "vim/vim.symlink/bundle/vim-css-colors"]
 	path = vim/vim.symlink/bundle/vim-css-colors
 	url = https://github.com/skammer/vim-css-color.git
-[submodule "vim/vim.symlink/bundle/powerline"]
-	path = vim/vim.symlink/bundle/powerline
-	url = https://github.com/Lokaltog/powerline.git
 [submodule "vim/vim.symlink/bundle/closetag"]
 	path = vim/vim.symlink/bundle/closetag
 	url = https://github.com/docunext/closetag.vim.git
@@ -37,3 +34,9 @@
 [submodule "vim/vim.symlink/bundle/nerdcommenter"]
 	path = vim/vim.symlink/bundle/nerdcommenter
 	url = https://github.com/scrooloose/nerdcommenter.git
+[submodule "vim/vim.symlink/bundle/python-mode"]
+	path = vim/vim.symlink/bundle/python-mode
+	url = git://github.com/klen/python-mode.git
+[submodule "vim/vim.symlink/bundle/vim-airline"]
+	path = vim/vim.symlink/bundle/vim-airline
+	url = https://github.com/bling/vim-airline.git

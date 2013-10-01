@@ -1,6 +1,7 @@
 " Preamble ---------------------------------------------------------------- {{{
 set nocompatible
 call pathogen#infect()
+call pathogen#helptags()
 filetype plugin indent on
 " }}}
 " Basic options ----------------------------------------------------------- {{{
@@ -29,7 +30,6 @@ hi Folded         gui=NONE   guifg=#cfcfcd   guibg=#453957
 " switch colors in TODO, so it appears on cursorline
 hi Todo           gui=BOLD   guifg=#d0a060   guibg=#303030
 set guifont=PragmataPro\ 10
-let g:Powerline_symbols="fancy"
 set number
 " Use cursorline and fix ugly yellow
 set cursorline
@@ -188,8 +188,17 @@ let g:tex_flavor = "latex"
 let g:Tex_ImageDir = '.'
 " }}} pdflatex
 
+" vim-airline {{{
+let g:airline_powerline_fonts = 1
+let g:airline_theme = 'laederon'
+" let g:airline#extensions#tabline#enabled = 1
+" let g:airline#extensions#tabline#left_sep = ' '
+" let g:airline#extensions#tabline#left_alt_sep = '|'
+" }}}
+"
 " Powerline {{{
-set rtp+=~/.vim/bundle/powerline/powerline/bindings/vim
+" set rtp+=~/.vim/bundle/powerline/powerline/bindings/vim
+" let g:Powerline_symbols="fancy"
 " }}} Powerline
 
 " NERDTree {{{
