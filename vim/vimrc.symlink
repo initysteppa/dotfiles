@@ -207,6 +207,9 @@ nmap \e :NERDTreeToggle<CR>
 " tagbar {{{
 nmap <Leader>t :TagbarToggle<CR>
 " }}} tagbar
+" python-mode {{{
+let g:pymode_rope = 0
+" }}} python-mode
 " }}} Plugin settings
 " Mini-plugins ------------------------------------------------------------ {{{
 " Pulse Line {{{
