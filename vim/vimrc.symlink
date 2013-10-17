@@ -169,6 +169,9 @@ augroup ft_tex
 	au FileType tex call IMAP('`w', '\omega', 'tex')
 augroup END
 " }}} Vim
+" {{{ jQuery syntax
+au BufRead,BufNewFile jquery.*.js set ft=javascript syntax=jquery
+" }}} jQuery syntax
 " }}} Filetype-specific
 
 " Plugin settings --------------------------------------------------------- {{{
@@ -203,6 +206,11 @@ let g:airline_theme = 'laederon'
 
 " NERDTree {{{
 nmap \e :NERDTreeToggle<CR>
+let NERDTreeIgnore = ['\.pyc$']
+let NERDTreeIgnore+=['.*\.o$']
+let NERDTreeIgnore+=['.*\~$']
+let NERDTreeIgnore+=['.*\.out$']
+let NERDTreeIgnore+=['.*\.so$', '.*\.a$']
 " }}} NERDTree
 " tagbar {{{
 nmap <Leader>t :TagbarToggle<CR>
@@ -212,6 +220,14 @@ let g:pymode_rope = 0
 " }}} python-mode
 " }}} Plugin settings
 " Mini-plugins ------------------------------------------------------------ {{{
+" Vimtips {{{
+function! Vimtips() " {{{
+  split ~/Projects/vim-bindings
+  resize 9
+  set readonly
+endfunction " }}}
+" Vimtips }}}
+	
 " Pulse Line {{{
 
 function! s:Pulse() " {{{
