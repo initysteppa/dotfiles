@@ -46,3 +46,6 @@
 [submodule "vim/vim.symlink/bundle/jquery-syntax"]
 	path = vim/vim.symlink/bundle/jquery-syntax
 	url = https://github.com/vim-scripts/jQuery.git
+[submodule "vim/vim.symlink/bundle/vim-markdown"]
+	path = vim/vim.symlink/bundle/vim-markdown
+	url = https://github.com/tpope/vim-markdown.git
