@@ -29,11 +29,21 @@ colorscheme inkpot
 hi Folded         gui=NONE   guifg=#cfcfcd   guibg=#453957
 " switch colors in TODO, so it appears on cursorline
 hi Todo           gui=BOLD   guifg=#d0a060   guibg=#303030
-set guifont=PragmataPro\ 10
+set guifont=PragmataPro\ for\ Powerline\ 10
 set number
 " Use cursorline and fix ugly yellow
 set cursorline
 hi CursorLineNr       guifg=#8b8bcd
+
+" Look for a .vim.custom when a file is opened
+au BufNewFile,BufRead *.c call CheckForCustomConfiguration()
+function! CheckForCustomConfiguration()
+    " Check for .vim.custom in the directory containing the newly opened file
+    let custom_config_file = expand('%:p:h') . '/.vim.custom'
+    if filereadable(custom_config_file)
+        exe 'source' custom_config_file
+    endif
+endfunction
 
 " Line Return {{{
 
@@ -104,6 +114,9 @@ highlight ExtraWhitespace ctermbg=red guibg=#ce4e4e
 " Show trailing whitespace except when typing on line:
 nnoremap <Leader>wn :match ExtraWhitespace /\s\+\%#\@<!$/<CR>
 nnoremap <Leader>wf :match<CR>
+
+" Today = insert todays date
+command Today :norm! a<C-R>=strftime("%Y%m%d")<CR>
 
 " }}} Convenience mappings
 
@@ -194,6 +207,7 @@ let g:Tex_ImageDir = '.'
 " vim-airline {{{
 let g:airline_powerline_fonts = 1
 let g:airline_theme = 'laederon'
+" let g:airline_symbols.space = "\ua0"
 " let g:airline#extensions#tabline#enabled = 1
 " let g:airline#extensions#tabline#left_sep = ' '
 " let g:airline#extensions#tabline#left_alt_sep = '|'
@@ -204,6 +218,10 @@ let g:airline_theme = 'laederon'
 " let g:Powerline_symbols="fancy"
 " }}} Powerline
 
+" Syntastic {{{
+let g:syntastic_tex_chktex_showmsgs = 0
+" }}} Syntastic
+
 " NERDTree {{{
 nmap \e :NERDTreeToggle<CR>
 let NERDTreeIgnore = ['\.pyc$']
@@ -212,12 +230,21 @@ let NERDTreeIgnore+=['.*\~$']
 let NERDTreeIgnore+=['.*\.out$']
 let NERDTreeIgnore+=['.*\.so$', '.*\.a$']
 " }}} NERDTree
+
 " tagbar {{{
 nmap <Leader>t :TagbarToggle<CR>
 " }}} tagbar
+
 " python-mode {{{
 let g:pymode_rope = 0
 " }}} python-mode
+
+" ack.vim {{{
+" open Ack
+nnoremap <leader>a :Ack
+" run Ack against word under cursor
+nnoremap <leader>A :Ack <c-r><c-w><CR>
+" }}}} ack.vim
 " }}} Plugin settings
 " Mini-plugins ------------------------------------------------------------ {{{
 " Vimtips {{{
