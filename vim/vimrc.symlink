@@ -1,7 +1,35 @@
 " Preamble ---------------------------------------------------------------- {{{
 set nocompatible
-call pathogen#infect()
-call pathogen#helptags()
+filetype off
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+Bundle 'gmarik/vundle'
+
+Bundle 'mileszs/ack.vim'
+Bundle 'docunext/closetag.vim'
+Bundle 'kien/ctrlp.vim'
+Bundle 'mattn/gist-vim'
+Bundle 'vim-scripts/javacomplete'
+Bundle 'davidhalter/jedi-vim'
+Bundle 'vim-scripts/jQuery'
+Bundle 'scrooloose/nerdcommenter'
+Bundle 'scrooloose/nerdtree'
+Bundle 'klen/python-mode'
+Bundle 'scrooloose/syntastic'
+Bundle 'majutsushi/tagbar'
+Bundle 'SirVer/ultisnips'
+Bundle 'bling/vim-airline'
+Bundle 'skammer/vim-css-color'
+Bundle 'tpope/vim-fugitive'
+Bundle 'tpope/vim-markdown'
+Bundle 'tpope/vim-unimpaired'
+
+" scripts from http://vim-scripts.org/vim/scripts.html
+Bundle 'bufexplorer.zip'
+
+"Helptags
+
 filetype plugin indent on
 " }}}
 " Basic options ----------------------------------------------------------- {{{
