@@ -116,7 +116,9 @@ install_dotfiles () {
 
 setup_gitconfig
 install_dotfiles
-git submodule init && git submodule update
+# git submodule init && git submodule update
+git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/vundle
+vim +BundleInstall +qall #1&> /dev/null
 
 # If we are on a mac, lets install and setup homebrew
 if [ "$(uname -s)" == "Darwin" ]
