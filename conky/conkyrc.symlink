@@ -3,7 +3,7 @@
 use_xft yes
 xftfont OFL Sorts Mill Goudy:size=7
 xftalpha 0.8
-text_buffer_size 2048
+text_buffer_size 3072
 
 # Update interval in seconds
 update_interval 1
@@ -99,13 +99,23 @@ ${voffset -69}${goto 135}${font arial black:size=15}${color orange}${time %d}${c
 ${voffset -30}${goto 170}${font arial black:size=12}${time %B %Y}
 ${voffset -8}${goto 170}${font arial black:size=9}${time %A, week %V}
 ${font arial black:size=7}LAST SYNC: ${alignr}$font${execi 300 /home/exploo/scripts/lastsync.pl}
+# CPU
 ${font arial black:size=10}${color orange}CPU${color}${font arial black:size=10}INFORMATION${color orange} ${hr 2}$color$font
 ${font arial black:size=7}MODEL: $font ${execi 1000 cat /proc/cpuinfo | grep -m 1 "model name" | cut -c14-37} $alignr ${freq_g (1)} GHz
-${font arial black:size=7}USAGE (AVG): $font${cpu cpu0}% ${goto 240}${font arial black:size=7}TEMP: $alignr$font${execi 15 sensors | grep 'CPU Temp': | tail -n 1 | awk '{print $3}' |sed 's/+//; s/°C//'}C$color
+${font arial black:size=7}USAGE (AVG): $font${cpu cpu0}% ${goto 240}${font arial black:size=7}
 ${cpugraph cpu0 FFFFFF FFFFFF}
 ${font arial black:size=7}CORE 1: $font${cpu cpu1}% ${goto 80}${cpubar cpu1 7,90}
 ${font arial black:size=7}CORE 2: $font${cpu cpu2}% ${goto 80}${cpubar cpu2 7,90}
 ${font arial black:size=7}CORE 3: $font${cpu cpu3}% ${goto 80}${cpubar cpu3 7,90}
+# TEMPS
+${font arial black:size=10}${color orange}TEMP${color}${font arial black:size=10}INFORMATION${color orange} ${hr 2}$color$font
+${font arial black:size=7}CPU${goto 80}M/B${goto 150}GPU${goto 230}SDB${alignr}SDC
+$font${execi 15 sensors | grep 'CPU Temp:' | awk '{print $3}' |sed 's/+//'}\
+${goto 80}${execi 15 sensors | grep 'M/B Temp:' | awk '{print $3}' |sed 's/+//'}\
+${goto 150}${execi 15 sensors | grep 'temp1:' | awk '{print $2}' |sed 's/+//'}\
+${goto 230}${execi 15 sudo hddtemp /dev/sdb | awk '{print $4}'}\
+${alignr}${execi 15 sudo hddtemp /dev/sdc | awk '{print $4}'}
+# MEMORY INFO
 ${font arial black:size=10}${color orange}MEMORY${color}${font arial black:size=10}INFORMATION${color orange} ${hr 2}$color$font
 ${font arial black:size=7}RAM: $font$memperc% ${alignr}$mem / $memmax 
 ${membar 4}
@@ -138,19 +148,23 @@ ${font arial black:size=7}TOTAL: $font${totaldown eth0} ${goto 170}${font arial 
 #
 # MPD
 #
-$if_mpd_playing${font arial black:size=10}${color orange}MPD${color}${font arial black:size=10}INFORMATION${color orange} ${hr 2}$color$font
+$if_mpd_playing$ \
+{font arial black:size=10}${color orange}MPD${color}${font arial black:size=10}INFORMATION${color orange} ${hr 2}$color$font
 ${font arial black:size=7}STATUS: ${goto 60} $font $mpd_status
 ${font arial black:size=7}ARTIST: ${goto 60} $font $mpd_artist
 ${font arial black:size=7}TITLE: ${goto 60} $font $mpd_title
-$mpd_bar $endif 
+$mpd_bar $endif \
 #
 # BANSHEE
 #
-${if_running banshee}${font arial black:size=10}${color orange}BANSHEE${color}${font arial black:size=10}INFORMATION${color orange} ${hr 2}$color$font
+${if_running banshee} \
+${font arial black:size=10}${color orange}BANSHEE${color}${font arial black:size=10}INFORMATION${color orange} ${hr 2}$color$font
 ${font arial black:size=7}ARTIST: ${font}${exec conkyBanshee --datatype=AR} 
 ${font arial black:size=7}TITLE: ${font}${exec conkyBanshee --datatype=TI} 
 ${font arial black:size=7}ALBUM: ${font}${exec conkyBanshee --datatype=AL} 
-${font arial black:size=7}Position:  ${font}${exec conkyBanshee --datatype=PT}/${exec conkyBanshee --datatype=LE} $endif
+${font arial black:size=7}Position:  ${font}${exec conkyBanshee --datatype=PT}/${exec conkyBanshee --datatype=LE}
+$endif \
+
 #
 # TOP
 ${font arial black:size=10}TOP${color orange} ${hr 2}$color$font
@@ -162,7 +176,10 @@ ${font arial black:size=7}MEM USAGE $font
 ${color orange}${top_mem name 1} $alignr ${top_mem pid 1} ${top_mem cpu 1} ${top_mem mem 1}$color
 ${top_mem name 2} $alignr ${top_mem pid 2} ${top_mem cpu 2} ${top_mem mem 2}
 ${top_mem name 3} $alignr ${top_mem pid 3} ${top_mem cpu 3} ${top_mem mem 3}
-
 # TODO
-${font arial black:size=10}TODO${color orange} ${hr 2}$color$font
-${execpi 120 ~/Dropbox/todo/todo.sh -d ~/.todo/config-conky ls}
+# ${font arial black:size=10}TODO${color orange} ${hr 2}$color$font
+# ${execpi 120 ~/Dropbox/todo/todo.sh -d ~/.todo/config-conky ls}
+${if_existing /tmp/ssh-mhelm@lindgren.pdc.kth.se:22}
+${font arial black:size=10}${color orange}CLUSTER${color}${font arial black:size=10}INFORMATION${color orange} ${hr 2}$color$font
+${execpi 300 ~/scripts/sshexec lindgren 'python ~/scripts/showmyq.py'}
+$endif
