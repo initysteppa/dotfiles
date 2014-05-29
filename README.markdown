@@ -1,4 +1,4 @@
-# initysteppa does dotfiles
+# mhelmer does dotfiles
 
 ## dotfiles
 
