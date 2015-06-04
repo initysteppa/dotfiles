@@ -1,6 +1,7 @@
-#! /bin/sh
+#! /bin/bash
 
-# Author: Matthieu Moy <Matthieu.Moy@imag.fr> (2012)
+# Main author: Matthieu Moy <Matthieu.Moy@imag.fr> (2012, 2013)
+# (See the Git history for other contributors)
 #
 # Copying and distribution of this file, with or without modification,
 # are permitted in any medium without royalty provided the copyright
@@ -20,8 +21,7 @@
 # To install, just copy git-latexdiff in your $PATH.
 
 # Missing features (patches welcome ;-):
-# - diff the index or the current worktree
-# - checkout only a subdirectory of the repo
+# - diff the index
 # - hardlink temporary checkouts as much as possible
 
 # Alternatives:
@@ -31,16 +31,26 @@
 # My experience is that latexdiff-git is more buggy than
 # git-latexdiff, but they probably just don't have the same bugs ;-)
 #
-# Ideally, these two scripts should be merged.
+# There are a bunch of other alternatives cited here:
+#
+#   http://tex.stackexchange.com/questions/1325/using-latexdiff-with-git
+#
+# Ideally, these scripts should be merged.
+
+set -o errexit
+set -o noclobber
 
 git_latexdiff_version=1.0
 
 usage () {
-            cat << EOF
+    cat << EOF
 Usage: $(basename $0) [options] OLD [NEW]
+       $(basename $0) [options] OLD --
+       $(basename $0) [options] -- OLD
 Call latexdiff on two Git revisions of a file.
 
 OLD and NEW are Git revision identifiers. NEW defaults to HEAD.
+If "--" is used for NEW, then diff against the working directory.
 
 Options:
     --help                this help message
@@ -48,19 +58,44 @@ Options:
     --no-view             don't display the resulting PDF file
     --bibtex, -b          run bibtex as well as latex
                              (pdflatex,bibtex,pdflatex,pdflatex)
-    --biber			          run BibLaTex-Biber as well as latex
+    --biber               run BibLaTex-Biber as well as latex
                              (pdflatex,bibtex,pdflatex,pdflatex)
     --view                view the resulting PDF file
                             (default if -o is not used)
     --pdf-viewer <cmd>    use <cmd> to view the PDF file (default: \$PDFVIEWER)
     --no-cleanup          don't cleanup temp dir after running
+    --no-flatten          don't provide latexdiff the --flatten option
+    --cleanup MODE        Cleanup temporary files according to MODE:
+
+                           - keeppdf (default): keep only the
+                                  generated PDF file
+
+                           - none: keep all temporary files
+                                  (may eat your diskspace)
+
+                           - all: erase all generated files.
+                                  Problematic with --view when the
+                                  viewer is e.g. evince, and doesn't
+                                  like when the file being viewed is
+                                  deleted.
+
+    --latexmk             use latexmk
+    --latexopt            pass additional options to latex (e.g. -shell-escape)
     -o <file>, --output <file>
-                          copy resulting PDF into <file>
-                             (usually ending with .pdf)
+                          copy resulting PDF into <file> (usually ending with .pdf)
+                          Implies "--cleanup all"
+    --tmpdirprefix        where temporary directory will be created (default: /tmp)
     --verbose, -v         give more verbose output
+    --quiet               redirect output from subprocesses to log files
     --prepare <cmd>       run <cmd> before latexdiff (e.g. run make to generate
                              included files)
+    --ln-untracked        symlink uncommited files from the working directory
     --version             show git-latexdiff version.
+    --subtree             checkout the tree at and below the main file
+                             (enabled by default, disable with --whole-tree)
+    --whole-tree          checkout the whole tree (contrast with --subtree)
+    --ignore-makefile     ignore the Makefile, build as though it doesn't exist
+    -*                    other options are passed directly to latexdiff
 EOF
 }
 
@@ -87,17 +122,31 @@ verbose_done () {
     fi
 }
 
+verbose_say () {
+    if test "$verbose" = 1 ; then
+	printf "%s\n" "$@"
+    fi
+}
+
 old=
 new=
 main=
 view=maybe
-cleanup=1
+cleanup=keeppdf
 verbose=0
 bibtex=0
 biber=0
 output=
 initial_dir=$PWD
+tmpdir_prefix="/tmp"
 prepare_cmd=
+flatten=1
+subtree=1
+uselatexmk=
+latexopt=
+ln_untracked=0
+quiet=0
+latexdiffopt=()
 
 while test $# -ne 0; do
     case "$1" in
@@ -120,11 +169,31 @@ while test $# -ne 0; do
 	    PDFVIEWER="$1"
 	    ;;
 	"--no-cleanup")
-	    cleanup=0
+	    cleanup=none
+	    ;;
+        "--cleanup")
+            shift
+            case "$1" in
+                "none"|"all"|"keeppdf")
+                    cleanup="$1"
+                    ;;
+                *)
+                    echo "Bad argument --cleanup $1"
+                    usage
+                    exit 1
+                    ;;
+            esac
+            ;;
+	"--no-flatten")
+            flatten=0
+            ;;
+	"--ignore-makefile")
+	    ignoremake=1
 	    ;;
 	"-o"|"--output")
 	    test $# -gt 1 && shift || die "missing argument for $1"
 	    output=$1
+	    cleanup=all
 	    ;;
 	"-b"|"--bibtex")
 	    bibtex=1
@@ -135,14 +204,53 @@ while test $# -ne 0; do
 	"--verbose"|"-v")
 	    verbose=1
 	    ;;
+        "--quiet")
+	    quiet=1
+	    ;;
 	"--version")
 	    echo "$git_latexdiff_version"
             exit 0
+	    ;;
+	"--subtree")
+	    subtree=1
+	    ;;
+	"--whole-tree")
+	    subtree=0
 	    ;;
 	"--prepare")
 	    shift
 	    prepare_cmd="$1"
 	    ;;
+        "--latexmk")
+            uselatexmk=1
+            ;;
+	"--latexopt")
+	    shift
+	    latexopt=$1
+	    ;;
+        "--ln-untracked")
+            ln_untracked=1
+            ;;
+        "--no-ln-untracked")
+            ln_untracked=0
+            ;;
+        "--tmpdirprefix")
+	    shift
+	    tmpdir_prefix="$1"
+	    ;;
+        -*)
+            if test "$1" = "--" ; then
+                if test -z "$new" ; then
+                    new=$1
+                else
+                    echo "Bad argument $1"
+                    usage
+                    exit 1
+                fi
+            else
+                latexdiffopt+=("$1")
+            fi
+            ;;
         *)
 	    if test -z "$1" ; then
 		echo "Empty string not allowed as argument"
@@ -164,6 +272,9 @@ done
 
 if test -z "$new" ; then
     new=HEAD
+fi
+if test "$new" = "--"; then
+    ln_untracked=1
 fi
 
 if test -z "$old" ; then
@@ -201,6 +312,23 @@ case "$view" in
 	;;
 esac
 
+check_knitr () {
+    if test -z "$prepare_cmd"; then
+	prepare_cmd="Rscript -e \"library(knitr); knit('$main')\""
+    fi
+    main="${main%\.*}.tex"
+}
+
+log_cmd () {
+    log=$1
+    shift
+    if [ "$quiet" = 1 ]; then
+	"$@" >$log 2>&1
+    else
+	"$@"
+    fi
+}
+
 if test -z "$main" ; then
     printf "%s" "No --main provided, trying to guess ... "
     main=$(git grep -l '^[ \t]*\\documentclass')
@@ -218,6 +346,13 @@ if test -z "$main" ; then
     fi
 fi
 
+ext=${main##*\.}
+case "$ext" in
+    Rnw) check_knitr ;;
+    Rtex) check_knitr ;;
+    *) ;;
+esac
+
 if test ! -r "$main" ; then
     die "Cannot read $main."
 fi
@@ -225,27 +360,45 @@ fi
 verbose "Creating temporary directories"
 
 git_prefix=$(git rev-parse --show-prefix)
-cd "$(git rev-parse --show-cdup)" || die "Can't cd back to repository root"
 git_dir="$(git rev-parse --git-dir)" || die "Not a git repository?"
+cd "$(git rev-parse --show-cdup)" || die "Can't cd back to repository root"
 git_dir=$(cd "$git_dir"; pwd)
 
 main=$git_prefix/$main
 
-tmpdir=$initial_dir/git-latexdiff.$$
+tmpdir=$tmpdir_prefix/git-latexdiff.$$
 mkdir "$tmpdir" || die "Cannot create temporary directory."
 
 cd "$tmpdir" || die "Cannot cd to $tmpdir"
 
-mkdir old new diff || die "Cannot create old, new and diff directories."
+mkdir old new || die "Cannot create old and new directories."
 
 verbose_done
 verbose "Checking out old and new version"
 
 cd old || die "Cannot cd to old/"
-git --git-dir="$git_dir" --work-tree=. checkout "$old" -- . || die "checkout failed for old/"
+if test "$ln_untracked" = 1; then
+    ln -s "$initial_dir"/* .
+fi
+
+if test "$subtree" = 1; then
+    checkoutroot=$git_prefix
+else
+    checkoutroot="."
+fi
+
+# Checkout a subtree, without touching the index ("git checkout" would)
+(cd "$git_dir" && git archive --format=tar "$old" "$checkoutroot") | tar -xf -
 verbose_progress
 cd ../new || die "Cannot cd to new/"
-git --git-dir="$git_dir" --work-tree=. checkout "$new" -- . || die "checkout failed for new/"
+if test "$ln_untracked" = 1; then
+    ln -s "$initial_dir"/* .
+fi
+if test "$new" != "--"; then
+    # if new == "--" then diff working dir (already there thanks to ln
+    # -s above).
+    (cd "$git_dir" && git archive --format=tar "$new" "$checkoutroot") | tar -xf -
+fi
 verbose_progress
 cd ..
 
@@ -253,15 +406,27 @@ verbose_done
 
 for dir in old new
 do
-    verbose "Running preparation command $prepare_cmd in $dir/"
-    ( cd "$dir/$git_prefix/" && $prepare_cmd )
+    verbose "Running preparation command $prepare_cmd in $dir/$git_prefix"
+    ( cd "$dir/$git_prefix/" && log_cmd prepare.log eval "$prepare_cmd" )
+    if test ! -f "$dir/$main"; then
+	die "$prepare_cmd did not produce $dir/$main."
+    fi
     verbose_done
 done
 
-verbose "Running latexdiff --flatten old/$main new/$main > $main"
+if test "$flatten" = 1; then
+    latexdiffopt+=("--flatten")
+fi
 
-latexdiff --flatten old/"$main" new/"$main" > diff.tex || die "latexdiff failed"
+verbose "Running latexdiff ${latexdiffopt[@]} old/$main new/$main > ./diff.tex"
 
+latexdiff "${latexdiffopt[@]}" old/"$main" new/"$main" > diff.tex || die "latexdiff failed"
+
+verbose_done
+
+verbose "mv ./diff.tex new/$main"
+
+mv -f new/"$main" new/"$main.orig"
 mv -f diff.tex new/"$main"
 
 verbose_done
@@ -273,18 +438,25 @@ verbose "Compiling result"
 
 compile_error=0
 cd new/"$maindir" || die "Can't cd to new/$maindir"
-if test -f Makefile ; then
-    make || compile_error=1
+if test -f Makefile && test "$ignoremake" != 1 ; then
+    log_cmd make.log make || compile_error=1
+elif test "$uselatexmk" = 1; then
+    log_cmd latexmk.log latexmk -f -pdf -silent "$mainbase" || compile_error=1
 else
-    pdflatex --interaction errorstopmode "$mainbase" || compile_error=1
+    if [ "$quiet" = 1 ]; then
+	latexopt="$latexopt -interaction=nonstopmode"
+    else
+	latexopt="$latexopt -interaction=errorstopmode"
+    fi
+    log_cmd pdflatex1.log pdflatex $latexopt "$mainbase" || compile_error=1
     if test "$bibtex" = 1 ; then
-	bibtex "$mainbase"  || compile_error=1
+	log_cmd bibtex.log bibtex "$mainbase" || compile_error=1
     fi
     if test "$biber" = 1 ; then
-	biber "$mainbase"  || compile_error=1
+	log_cmd biber.log biber "$mainbase" || compile_error=1
     fi
-    pdflatex --interaction errorstopmode "$mainbase" || compile_error=1
-    pdflatex --interaction errorstopmode "$mainbase" || compile_error=1
+    log_cmd pdflatex2.log pdflatex $latexopt "$mainbase" || compile_error=1
+    log_cmd pdflatex3.log pdflatex $latexopt "$mainbase" || compile_error=1
 fi
 
 verbose_done
@@ -302,7 +474,7 @@ fi
 
 if test "$compile_error" = "1" ; then
     echo "Error during compilation. Please examine and cleanup if needed:"
-    echo "Directory: $tmpdir/new/$maindir/"
+    echo "Directory: $tmpdir/new/$maindir"
     echo "     File: $mainbase.tex"
     # Don't clean up to let the user diagnose.
     exit 1
@@ -310,16 +482,31 @@ fi
 
 if test -n "$output" ; then
     abs_pdffile="$PWD/$pdffile"
-    (cd "$initial_dir" && cp "$abs_pdffile" "$output")
+    (cd "$initial_dir" && mv "$abs_pdffile" "$output")
     echo "Output written on $output"
+elif [ -f "$pdffile" ]; then
+    new_pdffile="$tmpdir"/"$pdffile"
+    mv "$pdffile" "$new_pdffile"
+    pdffile="$new_pdffile"
 fi
+
 
 if test "$view" = 1  || test "$view" = maybe  && test -z "$output" ; then
     "$PDFVIEWER" "$pdffile"
 fi
 
-if test "$cleanup" = 1 ; then
-    verbose "Cleaning-up result"
-    rm -fr "$tmpdir"
-    verbose_done
-fi
+case "$cleanup" in
+    "all")
+	verbose "Cleaning-up result"
+	rm -fr "$tmpdir"
+	verbose_done
+	;;
+    "keeppdf")
+	verbose "Cleaning-up all but pdf (kept in $pdffile)"
+	rm -fr "$tmpdir"/old "$tmpdir"/new
+	verbose_done
+	;;
+    "none")
+	verbose_say "Generated files kept in $tmpdir/"
+	;;
+esac
