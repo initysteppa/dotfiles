@@ -1,4 +1,4 @@
-# initysteppa does dotfiles
+# mhelmer does dotfiles
 
 ## dotfiles
 
@@ -22,7 +22,7 @@ subject](http://zachholman.com/2010/08/dotfiles-are-meant-to-be-forked/).
 Run this:
 
 ```sh
-git clone http://github.com/initysteppa/dotfiles.git ~/.dotfiles
+git clone http://github.com/mhelmer/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 script/bootstrap
 ```
