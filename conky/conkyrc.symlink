@@ -140,31 +140,46 @@ ${fs_bar 4 /mnt/backups}$color
 ${font arial black:size=7}WINDOWS:$font${goto 100}${fs_type /mnt/windows}${goto 150}${fs_used /mnt/windows}${goto 210}${fs_free /mnt/windows}${alignr}${fs_size /mnt/windows}
 ${fs_bar 4 /mnt/windows}$color
 #
-${font arial black:size=10}${color orange}NETWORK${color}${font arial black:size=10}INFORMATION${color orange} ${hr 2}$color$font
-${font arial black:size=7}LOCAL: $font${addr eth0} ${goto 170}${font arial black:size=7}EXTERNAL: $font${execi 14400 wget -qO- http://ipecho.net/plain}
+# NETWROK
+${font arial black:size=10}${color orange}NETWORK${color}INFORMATION${color orange} ${hr 2}$color$font
+${if_up eth0}\
+${font arial black:size=8}ETH0 ${color orange}${hr 2}$color$font
+${font arial black:size=7}LOCAL: $font${addr eth0} ${goto 170}${font arial black:size=7}
 ${font arial black:size=7}DOWN: $font$color${downspeed eth0}/s ${goto 170}${font arial black:size=7}UP: $font${upspeed eth0}/s
 ${downspeedgraph eth0 25,145} ${goto 170}${upspeedgraph eth0 25,145}
 ${font arial black:size=7}TOTAL: $font${totaldown eth0} ${goto 170}${font arial black:size=7}TOTAL: $font${totalup eth0}
+$endif\
+${if_up usb0}\
+${font arial black:size=8}USB0 ${color orange}${hr 1}$color$font
+${font arial black:size=7}LOCAL: $font${addr usb0} ${goto 170}${font arial black:size=7}
+${font arial black:size=7}DOWN: $font$color${downspeed usb0}/s ${goto 170}${font arial black:size=7}UP: $font${upspeed usb0}/s
+${downspeedgraph usb0 25,145} ${goto 170}${upspeedgraph usb0 25,145}
+${font arial black:size=7}TOTAL DOWN: $font${totaldown usb0} ${goto 170}${font arial black:size=7}TOTAL UP: $font${totalup usb0}
+$endif\
+${if_up tun0}\
+${font arial black:size=8}TUN0 ${color orange}${hr 1}$color$font
+${font arial black:size=7}IP: $font${addr tun0}
+${font arial black:size=7}DOWN: $font${totaldown tun0} ${goto 170}${font arial black:size=7}UP: $font${totalup tun0}
+$endif\
 #
 # MPD
 #
-$if_mpd_playing$ \
+$if_mpd_playing$\
 {font arial black:size=10}${color orange}MPD${color}${font arial black:size=10}INFORMATION${color orange} ${hr 2}$color$font
 ${font arial black:size=7}STATUS: ${goto 60} $font $mpd_status
 ${font arial black:size=7}ARTIST: ${goto 60} $font $mpd_artist
 ${font arial black:size=7}TITLE: ${goto 60} $font $mpd_title
-$mpd_bar $endif \
+$mpd_bar $endif\
 #
 # BANSHEE
 #
-${if_running banshee} \
+${if_running banshee}\
 ${font arial black:size=10}${color orange}BANSHEE${color}${font arial black:size=10}INFORMATION${color orange} ${hr 2}$color$font
 ${font arial black:size=7}ARTIST: ${font}${exec conkyBanshee --datatype=AR} 
 ${font arial black:size=7}TITLE: ${font}${exec conkyBanshee --datatype=TI} 
 ${font arial black:size=7}ALBUM: ${font}${exec conkyBanshee --datatype=AL} 
 ${font arial black:size=7}Position:  ${font}${exec conkyBanshee --datatype=PT}/${exec conkyBanshee --datatype=LE}
-$endif \
-
+$endif
 #
 # TOP
 ${font arial black:size=10}TOP${color orange} ${hr 2}$color$font
@@ -181,5 +196,5 @@ ${top_mem name 3} $alignr ${top_mem pid 3} ${top_mem cpu 3} ${top_mem mem 3}
 # ${execpi 120 ~/Dropbox/todo/todo.sh -d ~/.todo/config-conky ls}
 ${if_existing /tmp/ssh-mhelm@lindgren.pdc.kth.se:22}
 ${font arial black:size=10}${color orange}CLUSTER${color}${font arial black:size=10}INFORMATION${color orange} ${hr 2}$color$font
-${execpi 300 ~/scripts/sshexec lindgren 'python ~/scripts/showmyq.py'}
+${execpi 240 ~/scripts/sshexec lindgren '~/scripts/showmyq'}
 $endif
