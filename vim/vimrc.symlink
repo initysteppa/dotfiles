@@ -24,6 +24,7 @@ Bundle 'skammer/vim-css-color'
 Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-markdown'
 Bundle 'tpope/vim-unimpaired'
+Bundle 'chase/vim-ansible-yaml'
 
 " scripts from http://vim-scripts.org/vim/scripts.html
 Bundle 'bufexplorer.zip'
