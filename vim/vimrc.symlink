@@ -4,34 +4,48 @@ filetype off
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
-Bundle 'gmarik/vundle'
+Plugin 'gmarik/vundle'
 
-Bundle 'mileszs/ack.vim'
-Bundle 'docunext/closetag.vim'
-Bundle 'kien/ctrlp.vim'
-Bundle 'mattn/gist-vim'
-Bundle 'vim-scripts/javacomplete'
-Bundle 'davidhalter/jedi-vim'
-Bundle 'vim-scripts/jQuery'
-Bundle 'scrooloose/nerdcommenter'
-Bundle 'scrooloose/nerdtree'
-Bundle 'klen/python-mode'
-Bundle 'scrooloose/syntastic'
-Bundle 'majutsushi/tagbar'
-Bundle 'SirVer/ultisnips'
-Bundle 'bling/vim-airline'
-Bundle 'skammer/vim-css-color'
-Bundle 'tpope/vim-fugitive'
-Bundle 'tpope/vim-markdown'
-Bundle 'tpope/vim-unimpaired'
-Bundle 'chase/vim-ansible-yaml'
-Bundle 'embear/vim-localvimrc'
-Bundle 'burnettk/vim-angular'
+Plugin 'scrooloose/nerdtree'
+Plugin 'bling/vim-airline'
+Plugin 'skammer/vim-css-color'
+Plugin 'tpope/vim-fugitive'
+
+" IDE {{{
+Plugin 'majutsushi/tagbar'
+Plugin 'scrooloose/syntastic'
+Plugin 'davidhalter/jedi-vim'
+Plugin 'klen/python-mode'
+" }}} IDE
+
+" searching {{{
+Plugin 'mileszs/ack.vim'
+Plugin 'kien/ctrlp.vim'
+" }}}
+
+" editing {{{
+Plugin 'docunext/closetag.vim'
+Plugin 'tpope/vim-unimpaired'
+Plugin 'SirVer/ultisnips'
+Plugin 'scrooloose/nerdcommenter'
+" }}} editing
+
+" syntax {{{
+Plugin 'burnettk/vim-angular'
+Plugin 'chase/vim-ansible-yaml'
+Plugin 'vim-scripts/jQuery'
+Plugin 'tpope/vim-markdown'
 Plugin 'kchmck/vim-coffee-script'
 Plugin 'digitaltoad/vim-jade'
+" }}} syntax
+
+" colorschemes {{{
+Plugin 'morhetz/gruvbox'
+Plugin 'nanotech/jellybeans.vim'
+" }}} colorschemes
 
 " scripts from http://vim-scripts.org/vim/scripts.html
-Bundle 'bufexplorer.zip'
+Plugin 'bufexplorer.zip'
 
 "Helptags
 
@@ -57,11 +71,7 @@ set guioptions-=r
 set t_Co=256
 syntax on
 set background=dark
-colorscheme inkpot
-" less extreme fold color
-hi Folded         gui=NONE   guifg=#cfcfcd   guibg=#453957
-" switch colors in TODO, so it appears on cursorline
-hi Todo           gui=BOLD   guifg=#d0a060   guibg=#303030
+colorscheme gruvbox
 set guifont=PragmataPro\ for\ Powerline\ 10
 set number
 " Use cursorline and fix ugly yellow
@@ -253,6 +263,15 @@ let g:airline_theme = 'laederon'
 
 " Syntastic {{{
 let g:syntastic_tex_chktex_showmsgs = 0
+let g:syntastic_ignore_files = ['\.py$']
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
 " }}} Syntastic
 
 " NERDTree {{{
