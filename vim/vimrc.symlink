@@ -10,12 +10,15 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'bling/vim-airline'
 Plugin 'skammer/vim-css-color'
 Plugin 'tpope/vim-fugitive'
+Plugin 'nathanaelkane/vim-indent-guides'
 
 " IDE {{{
 Plugin 'majutsushi/tagbar'
 Plugin 'scrooloose/syntastic'
 Plugin 'davidhalter/jedi-vim'
 Plugin 'klen/python-mode'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'ervandew/supertab'
 " }}} IDE
 
 " searching {{{
@@ -28,6 +31,7 @@ Plugin 'docunext/closetag.vim'
 Plugin 'tpope/vim-unimpaired'
 Plugin 'SirVer/ultisnips'
 Plugin 'scrooloose/nerdcommenter'
+Plugin 'honza/vim-snippets'
 " }}} editing
 
 " syntax {{{
@@ -231,11 +235,33 @@ au BufRead,BufNewFile jquery.*.js set ft=javascript syntax=jquery
 " }}} Filetype-specific
 
 " Plugin settings --------------------------------------------------------- {{{
+
+" YouCompleteMe {{{
+" make YCM compatible with UltiSnips (using supertab)
+let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
+let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
+let g:SuperTabDefaultCompletionType = '<C-n>'
+" }}} YouCompleteMe
+
 " UltiSnips {{{
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 " }}} UltiSnips
+
+" snippets variables {{{
+let g:snips_author='Magnus Helmersson'
+let g:author='Magnus Helmersson'
+let g:snips_email='magnus.hlmersson@gmail.com'
+let g:email='magnus.hlmersson@gmail.com'
+let g:snips_github='https://github.com/mhelmer'
+let g:github='https://github.com/mhelmer'
+" }}} snippets variables
+
+" vim-indent-guides {{{
+let g:indent_guides_start_level = 2
+let g:indent_guides_guide_size = 1
+" }}} vim-indent-guides
 
 " pdflatex {{{
 let g:Tex_CompileRule_pdf = 'latexmk -pdf -f $*'
@@ -255,7 +281,7 @@ let g:airline_theme = 'laederon'
 " let g:airline#extensions#tabline#left_sep = ' '
 " let g:airline#extensions#tabline#left_alt_sep = '|'
 " }}}
-"
+
 " Powerline {{{
 " set rtp+=~/.vim/bundle/powerline/powerline/bindings/vim
 " let g:Powerline_symbols="fancy"
