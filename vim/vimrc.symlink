@@ -6,7 +6,8 @@ call vundle#rc()
 
 Plugin 'gmarik/vundle'
 
-Plugin 'scrooloose/nerdtree'
+Plugin 'Shougo/vimfiler.vim'
+Plugin 'Shougo/unite.vim'
 Plugin 'bling/vim-airline'
 Plugin 'skammer/vim-css-color'
 Plugin 'tpope/vim-fugitive'
@@ -63,6 +64,8 @@ set laststatus=2
 set incsearch
 set encoding=utf-8
 
+let mapleader = "fj"
+
 " Make Vim able to edit crontab files again.
 set backupskip=/tmp/*,/private/tmp/*"
 
@@ -80,7 +83,7 @@ set guifont=PragmataPro\ for\ Powerline\ 10
 set number
 " Use cursorline and fix ugly yellow
 set cursorline
-hi CursorLineNr       guifg=#8b8bcd
+" hi CursorLineNr       guifg=#8b8bcd
 
 " Look for a .vim.custom when a file is opened
 au BufNewFile,BufRead *.c call CheckForCustomConfiguration()
@@ -300,8 +303,20 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 " }}} Syntastic
 
+" VimFiler {{{
+nmap <Leader>e ::VimFiler -buffer-name=explorer
+\ -split -simple -winwidth=35 -toggle -no-quit<CR>
+
+autocmd FileType vimfiler nmap <silent><buffer><expr> <CR> vimfiler#smart_cursor_map(
+\ "\<Plug>(vimfiler_expand_tree)",
+\ "\<Plug>(vimfiler_edit_file)")
+autocmd FileType vimfiler nmap <silent><buffer><expr> <2-LeftMouse> vimfiler#smart_cursor_map(
+\ "\<Plug>(vimfiler_expand_tree)",
+\ "\<Plug>(vimfiler_edit_file)")
+" }}} VimFiler
+
 " NERDTree {{{
-nmap \e :NERDTreeToggle<CR>
+" nmap \e :NERDTreeToggle<CR>
 let NERDTreeIgnore = ['\.pyc$']
 let NERDTreeIgnore+=['.*\.o$']
 let NERDTreeIgnore+=['.*\~$']
