@@ -12,6 +12,7 @@ Plugin 'bling/vim-airline'
 Plugin 'skammer/vim-css-color'
 Plugin 'tpope/vim-fugitive'
 Plugin 'nathanaelkane/vim-indent-guides'
+Plugin 'Konfekt/FastFold'
 
 " IDE {{{
 Plugin 'majutsushi/tagbar'
@@ -136,21 +137,25 @@ endif
 " }}} Backups
 
 " Convenience mappings ---------------------------------------------------- {{{
-" paste toggle
+map <silent> <A-h> <C-w><
+map <silent> <A-j> <C-w>-
+map <silent> <A-k> <C-w>+
+map <silent> <A-l> <C-w>>
 
 " Fuck you, help key.
 noremap  <F1> :set invfullscreen<CR>
 inoremap <F1> <ESC>:set invfullscreen<CR>a
 
+" paste toggle
 nnoremap <F2> :set invpaste paste?<CR>
 imap <F2> <C-O><F2>
 set pastetoggle=<F2>
 
 " Toggle line number
-:nmap \l :setlocal number!<CR>
+nmap <leader>l :setlocal number!<CR>
 
 " redraw screen and clear hightlights
-:noremap <silent> <c-l> :nohls<cr><c-l>
+noremap <silent> <c-l> :nohls<cr><c-l>
 
 " Select (charwise) the contents of the current line, excluding indentation.
 " Great for pasting Python lines into REPLs.
@@ -313,6 +318,9 @@ autocmd FileType vimfiler nmap <silent><buffer><expr> <CR> vimfiler#smart_cursor
 autocmd FileType vimfiler nmap <silent><buffer><expr> <2-LeftMouse> vimfiler#smart_cursor_map(
 \ "\<Plug>(vimfiler_expand_tree)",
 \ "\<Plug>(vimfiler_edit_file)")
+
+let g:vimfiler_ignore_pattern = '\.git\|\.DS_Store\|\.pyc'
+let g:vimfiler_as_default_explorer = 1
 " }}} VimFiler
 
 " NERDTree {{{
