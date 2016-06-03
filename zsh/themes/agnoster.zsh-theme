@@ -84,6 +84,14 @@ prompt_git() {
 }
 
 # Dir: current working directory
+prompt_docker_machine() {
+	if [ -n "$DOCKER_MACHINE_NAME" ]; then
+		prompt_segment red black
+		echo -n "🖥️ $(__docker_machine_ps1)"
+	fi
+}
+
+# Dir: current working directory
 prompt_dir() {
   prompt_segment blue black '%3~'
 }
@@ -109,6 +117,7 @@ build_prompt() {
   prompt_context
   prompt_dir
   prompt_git
+	prompt_docker_machine
   prompt_end
 }
 
