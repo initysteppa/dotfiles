@@ -13,6 +13,7 @@ Plugin 'skammer/vim-css-color'
 Plugin 'tpope/vim-fugitive'
 Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'Konfekt/FastFold'
+Plugin 'embear/vim-localvimrc'
 
 " IDE {{{
 Plugin 'majutsushi/tagbar'
@@ -22,6 +23,9 @@ Plugin 'klen/python-mode'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'ervandew/supertab'
 Plugin 'marijnh/tern_for_vim'
+Plugin 'guns/vim-clojure-static'
+Plugin 'tpope/vim-fireplace'
+" Plugin 'jaxbot/github-issues.vim'
 " }}} IDE
 
 " searching {{{
@@ -46,6 +50,10 @@ Plugin 'kchmck/vim-coffee-script'
 Plugin 'digitaltoad/vim-jade'
 Plugin 'othree/html5.vim'
 Plugin 'Glench/Vim-Jinja2-Syntax'
+Plugin 'mxw/vim-jsx'
+Plugin 'pangloss/vim-javascript'
+Plugin 'luochen1990/rainbow'
+
 " }}} syntax
 
 " colorschemes {{{
@@ -83,11 +91,13 @@ set t_Co=256
 syntax on
 set background=dark
 colorscheme gruvbox
-set guifont=PragmataPro\ for\ Powerline\ 10
+set guifont=PragmataPro\ for\ Powerline\ 6
 set number
 " Use cursorline and fix ugly yellow
 set cursorline
 " hi CursorLineNr       guifg=#8b8bcd
+
+set listchars=eol:¬,tab:→\ ,trail:~,extends:>,precedes:<
 
 " Look for a .vim.custom when a file is opened
 au BufNewFile,BufRead *.c call CheckForCustomConfiguration()
@@ -117,6 +127,10 @@ augroup END
 set shiftwidth=4
 set tabstop=4
 
+" Bash like completion
+set wildmode=longest,list,full
+set wildmenu
+
 " Backups {{{
 set backup                        " enable backups
 set noswapfile                    " It's 2012, Vim.
@@ -135,9 +149,9 @@ endif
 if !isdirectory(expand(&directory))
     call mkdir(expand(&directory), "p")
 endif
-" }}}
-
 " }}} Backups
+" }}} Basic options
+
 
 " Convenience mappings ---------------------------------------------------- {{{
 map <silent> <A-h> <C-w><
@@ -247,6 +261,9 @@ au BufRead,BufNewFile jquery.*.js set ft=javascript syntax=jquery
 
 " Plugin settings --------------------------------------------------------- {{{
 
+" github-issues {{{
+source ~/.vim/github-token.vim
+" }}} github-issues
 " YouCompleteMe {{{
 " make YCM compatible with UltiSnips (using supertab)
 let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
@@ -286,7 +303,7 @@ let g:Tex_ImageDir = '.'
 
 " vim-airline {{{
 let g:airline_powerline_fonts = 1
-let g:airline_theme = 'laederon'
+let g:airline_theme = 'gruvbox'
 " let g:airline_symbols.space = "\ua0"
 " let g:airline#extensions#tabline#enabled = 1
 " let g:airline#extensions#tabline#left_sep = ' '
@@ -309,6 +326,7 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+let g:syntastic_javascript_checkers = ['eslint']
 " }}} Syntastic
 
 " VimFiler {{{
@@ -341,6 +359,8 @@ nmap <Leader>t :TagbarToggle<CR>
 
 " python-mode {{{
 let g:pymode_rope = 0
+" hopefully solved by installing fastfold
+" let g:pymode_folding = 0
 " }}} python-mode
 
 " ack.vim {{{
@@ -349,6 +369,9 @@ nnoremap <leader>a :Ack
 " run Ack against word under cursor
 nnoremap <leader>A :Ack <c-r><c-w><CR>
 " }}}} ack.vim
+" {{{ rainbow
+" let g:rainbow_active = 1
+" }}} rainbow
 " }}} Plugin settings
 " Mini-plugins ------------------------------------------------------------ {{{
 " Vimtips {{{
@@ -395,6 +418,31 @@ endfunction " }}}
 command! -nargs=0 Pulse call s:Pulse()
 
 " }}} Pulse Line
+" Toggle diff highlight {{{
+"
+" Disable one diff window during a three-way diff allowing you to cut out the
+" noise of a three-way diff and focus on just the changes between two versions
+" at a time. Inspired by Steve Losh's Splice
+function! DiffToggle(window)
+  " Save the cursor position and turn on diff for all windows
+  let l:save_cursor = getpos('.')
+  windo :diffthis
+  " Turn off diff for the specified window (but keep scrollbind) and move
+  " the cursor to the left-most diff window
+  exe a:window . "wincmd w"
+  diffoff
+  set scrollbind
+  set cursorbind
+  exe a:window . "wincmd " . (a:window == 1 ? "l" : "h")
+  " Update the diff and restore the cursor position
+  diffupdate
+  call setpos('.', l:save_cursor)
+endfunction
+" Toggle diff view on the left, center, or right windows
+nmap <silent> <leader>dl :call DiffToggle(1)<cr>
+nmap <silent> <leader>dc :call DiffToggle(2)<cr>
+nmap <silent> <leader>dr :call DiffToggle(3)<cr>
+" }}} Toggöe diff highlight
 " }}} Mini-plugins
 "  TODO ------------------------------------------------------------------- {{{
 "
@@ -402,3 +450,6 @@ command! -nargs=0 Pulse call s:Pulse()
 "  match OverLength /\%81v.\+/
 "
 "  -------------------------------------------------------------------------}}}
+"
+"
+
