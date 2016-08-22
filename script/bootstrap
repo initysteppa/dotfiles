@@ -126,6 +126,11 @@ curl -L -0 https://github.com/docker/machine/raw/master/contrib/completion/bash/
 curl -L -0 https://github.com/docker/machine/raw/master/contrib/completion/bash/docker-machine-wrapper.bash -o docker-machine-wrapper.bash
 cd -
 
+git clone https://github.com/yyuu/pyenv.git ~/.pyenv
+git clone https://github.com/yyuu/pyenv-virtualenv.git ~/.pyenv/plugins/pyenv-virtualenv
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
+
 # If we are on a mac, lets install and setup homebrew
 if [ "$(uname -s)" == "Darwin" ]
 then
