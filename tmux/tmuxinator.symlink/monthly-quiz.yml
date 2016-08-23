@@ -1,0 +1,49 @@
+# ~/.tmuxinator/monthly-quiz.yml
+#vim: sw=2
+
+name: monthly-quiz
+root: ~/Projects/monthly-quiz
+
+# Optional tmux socket
+# socket_name: foo
+
+# Runs before everything. Use it to start daemons etc.
+# pre: sudo /etc/rc.d/mysqld start
+
+# Runs in each window and pane before window/pane specific commands. Useful for setting up interpreter versions.
+# pre_window: rbenv shell 2.0.0-p247
+
+# Pass command line options to tmux. Useful for specifying a different tmux.conf.
+# tmux_options: -f ~/.tmux.mac.conf
+
+# Change the command to call tmux.  This can be used by derivatives/wrappers like byobu.
+# tmux_command: byobu
+
+# Specifies (by name or index) which window will be selected on project startup. If not set, the first window is used.
+# startup_window: logs
+
+# Controls whether the tmux session should be attached to automatically. Defaults to true.
+# attach: false
+
+# Runs after everything. Use it to attach to tmux with custom options etc.
+# post: tmux -CC attach -t monthly-quiz
+
+windows:
+  - frontend:
+      root: ~/Projects/monthly-quiz/react/src
+      layout: 7010,315x76,0,0{217x76,0,0[217x62,0,0,0,217x13,0,63,5],97x76,218,0[97x38,218,0,2,97x37,218,39,7]}
+      panes:
+        - nvim app
+        - 
+        - npm run lint:watch
+        - npm run test:watch
+  - backend:
+      root: ~/Projects/monthly-quiz/django/src
+      panes:
+        - 
+  - docker:
+      layout: 9252,315x76,0,0{195x76,0,0[195x61,0,0,6,195x14,0,62,8],119x76,196,0,7}
+      panes:
+        - nvim .
+        - 
+        - docker-compose up
