@@ -19,11 +19,25 @@ Plugin 'christoomey/vim-tmux-navigator'
 " IDE {{{
 Plugin 'majutsushi/tagbar'
 Plugin 'scrooloose/syntastic'
+Plugin 'jaxbot/syntastic-react'
+Plugin 'mtscout6/syntastic-local-eslint.vim'
 Plugin 'davidhalter/jedi-vim'
 Plugin 'klen/python-mode'
-Plugin 'Valloric/YouCompleteMe'
+if has('nvim')
+	Plugin 'Shougo/deoplete.nvim'
+	Plugin 'carlitux/deoplete-ternjs'
+	Plugin 'zchee/deoplete-jedi'
+
+
+	let g:deoplete#enable_at_startup = 1
+
+	let g:python_host_prog = $HOME .'/.pyenv/versions/neovim2/bin/python'
+	let g:python3_host_prog = $HOME . '/.pyenv/versions/neovim3/bin/python'
+else
+	Plugin 'Valloric/YouCompleteMe'
+	Plugin 'marijnh/tern_for_vim'
+endif
 Plugin 'ervandew/supertab'
-Plugin 'marijnh/tern_for_vim'
 Plugin 'guns/vim-clojure-static'
 Plugin 'tpope/vim-fireplace'
 " Plugin 'jaxbot/github-issues.vim'
@@ -255,9 +269,7 @@ augroup ft_tex
 	au FileType tex call IMAP('`w', '\omega', 'tex')
 augroup END
 " }}} Vim
-" {{{ jQuery syntax
-au BufRead,BufNewFile jquery.*.js set ft=javascript syntax=jquery
-" }}} jQuery syntax
+autocmd Filetype javascript setlocal ts=2 sts=2 sw=2 expandtab
 " }}} Filetype-specific
 
 " Plugin settings --------------------------------------------------------- {{{
@@ -343,6 +355,14 @@ autocmd FileType vimfiler nmap <silent><buffer><expr> <2-LeftMouse> vimfiler#sma
 
 let g:vimfiler_ignore_pattern = '\.git\|\.DS_Store\|\.pyc'
 let g:vimfiler_as_default_explorer = 1
+
+let g:vimfiler_tree_leaf_icon = ' '
+let g:vimfiler_tree_opened_icon = '▾'
+let g:vimfiler_tree_closed_icon = '▸'
+let g:vimfiler_file_icon = '-'
+let g:vimfiler_marked_file_icon = '*'
+
+
 " }}} VimFiler
 
 " NERDTree {{{
@@ -373,6 +393,9 @@ nnoremap <leader>A :Ack <c-r><c-w><CR>
 " {{{ rainbow
 " let g:rainbow_active = 1
 " }}} rainbow
+" {{{ vim-jsx
+let g:jsx_ext_required = 0
+" }}} vim-jsx
 " }}} Plugin settings
 " Mini-plugins ------------------------------------------------------------ {{{
 " Vimtips {{{
