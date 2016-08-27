@@ -44,6 +44,22 @@ prompt_segment() {
   [[ -n $3 ]] && echo -n $3
 }
 
+# Begin an RPROMPT segment
+# Takes two arguments, background and foreground. Both can be omitted,
+# rendering default background/foreground.
+rprompt_segment() {
+  local bg fg
+  [[ -n $1 ]] && bg="%K{$1}" || bg="%k"
+  [[ -n $2 ]] && fg="%F{$2}" || fg="%f"
+  if [[ $CURRENT_BG != 'NONE' && $1 != $CURRENT_BG ]]; then
+    echo -n " %{%K{$CURRENT_BG}%F{$1}%}$RSEGMENT_SEPARATOR%{$bg%}%{$fg%} "
+  else
+    echo -n "%F{$1}%{%K{default}%}$RSEGMENT_SEPARATOR%{$bg%}%{$fg%} "
+  fi
+  CURRENT_BG=$1
+  [[ -n $3 ]] && echo -n $3
+}
+
 # End the prompt, closing any open segments
 prompt_end() {
   if [[ -n $CURRENT_BG ]]; then
@@ -83,11 +99,11 @@ prompt_git() {
   fi
 }
 
-# Dir: current working directory
+# Dir: show if using remote docker-machine
 prompt_docker_machine() {
 	if [ -n "$DOCKER_MACHINE_NAME" ]; then
 		prompt_segment red black
-		echo -n "🖥️ $(__docker_machine_ps1)"
+		echo -n "$(__docker_machine_ps1)"
 	fi
 }
 
