@@ -31,16 +31,21 @@ root: ~/Projects/monthly-quiz
 windows:
   - frontend:
       root: ~/Projects/monthly-quiz/react/src
-      layout: 7010,315x76,0,0{217x76,0,0[217x62,0,0,0,217x13,0,63,5],97x76,218,0[97x38,218,0,2,97x37,218,39,7]}
+      layout: f854,315x76,0,0{194x76,0,0[194x59,0,0,0,194x16,0,60,3],120x76,195,0[120x39,195,0,9,120x17,195,40,8,120x18,195,58,5]}
       panes:
-        - nvim app
+        - cd app && nvim .
         - 
+        - cd ~/Projects/monthly-quiz && sleep 3 && docker-compose logs -f --tail=500 react
         - npm run lint:watch
         - npm run test:watch
   - backend:
       root: ~/Projects/monthly-quiz/django/src
+      layout: 4999,315x76,0,0{194x76,0,0[194x59,0,0,1,194x16,0,60,7],120x76,195,0[120x38,195,0,8,120x37,195,39,10]}
       panes:
+        - nvim .
         - 
+        - cd ~/Projects/monthly-quiz && sleep 3 && docker-compose logs -f --tail=500 django
+        - cd ~/Projects/monthly-quiz && sleep 3 && docker-compose logs -f --tail=500 celery
   - docker:
       layout: 9252,315x76,0,0{195x76,0,0[195x61,0,0,6,195x14,0,62,8],119x76,196,0,7}
       panes:
