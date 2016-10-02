@@ -5,3 +5,5 @@ vim/vim.symlink/tmp/*
 vim/vim.symlink/bundle/*
 vim/vim.symlink/.netrwhist
 *.swp
+/docker-machine/bash_completion.d
+/tmux/tmux.symlink/plugins
