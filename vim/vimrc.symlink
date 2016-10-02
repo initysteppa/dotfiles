@@ -18,21 +18,21 @@ Plugin 'christoomey/vim-tmux-navigator'
 
 " IDE {{{
 Plugin 'majutsushi/tagbar'
-Plugin 'scrooloose/syntastic'
-Plugin 'jaxbot/syntastic-react'
-Plugin 'mtscout6/syntastic-local-eslint.vim'
 Plugin 'davidhalter/jedi-vim'
 Plugin 'klen/python-mode'
+Plugin 'neomake/neomake'
+Plugin 'benjie/neomake-local-eslint.vim'
 if has('nvim')
 	Plugin 'Shougo/deoplete.nvim'
 	Plugin 'carlitux/deoplete-ternjs'
 	Plugin 'zchee/deoplete-jedi'
 
-
 	let g:deoplete#enable_at_startup = 1
 
 	let g:python_host_prog = $HOME .'/.pyenv/versions/neovim2/bin/python'
 	let g:python3_host_prog = $HOME . '/.pyenv/versions/neovim3/bin/python'
+	let g:tern_request_timeout = 1
+	let g:tern_show_signature_in_pum = '0'  " This do disable full signature type on autocomplete
 else
 	Plugin 'Valloric/YouCompleteMe'
 	Plugin 'marijnh/tern_for_vim'
@@ -40,6 +40,7 @@ endif
 Plugin 'ervandew/supertab'
 Plugin 'guns/vim-clojure-static'
 Plugin 'tpope/vim-fireplace'
+Plugin 'heavenshell/vim-jsdoc'
 " Plugin 'jaxbot/github-issues.vim'
 " }}} IDE
 
@@ -277,6 +278,7 @@ autocmd Filetype javascript setlocal ts=2 sts=2 sw=2 expandtab
 " github-issues {{{
 source ~/.vim/github-token.vim
 " }}} github-issues
+"
 " YouCompleteMe {{{
 " make YCM compatible with UltiSnips (using supertab)
 let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
@@ -288,6 +290,7 @@ let g:SuperTabDefaultCompletionType = '<C-n>'
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+let g:UltiSnipsSnippetsDir = "~/.vim/UltiSnips"
 " }}} UltiSnips
 
 " snippets variables {{{
@@ -328,19 +331,9 @@ let g:airline_theme = 'gruvbox'
 " let g:Powerline_symbols="fancy"
 " }}} Powerline
 
-" Syntastic {{{
-let g:syntastic_tex_chktex_showmsgs = 0
-let g:syntastic_ignore_files = ['\.py$']
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_javascript_checkers = ['eslint']
-" }}} Syntastic
+"  {{{ Neomake
+autocmd! BufWritePost * Neomake
+" }}} Neomake
 
 " VimFiler {{{
 nmap <Leader>e ::VimFiler -buffer-name=explorer
@@ -390,12 +383,25 @@ nnoremap <leader>a :Ack
 " run Ack against word under cursor
 nnoremap <leader>A :Ack <c-r><c-w><CR>
 " }}}} ack.vim
+
 " {{{ rainbow
 " let g:rainbow_active = 1
 " }}} rainbow
+
 " {{{ vim-jsx
 let g:jsx_ext_required = 0
 " }}} vim-jsx
+
+" {{{ vim-jsdoc
+let g:jsdoc_enable_es6 = 1
+let g:jsdoc_allow_input_prompt = 1
+let g:jsdoc_input_description = 1
+" }}} vim-jsdoc
+
+" {{{ vim-javascript
+let g:javascript_plugin_jsdoc = 1
+" }}} vim-javascript
+
 " }}} Plugin settings
 " Mini-plugins ------------------------------------------------------------ {{{
 " Vimtips {{{
