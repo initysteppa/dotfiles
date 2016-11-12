@@ -107,10 +107,11 @@ au VimResized * :wincmd =
 set guioptions-=T
 set guioptions-=r
 set t_Co=256
+
 syntax on
 set background=dark
 colorscheme gruvbox
-set guifont=PragmataPro\ for\ Powerline\ 6
+set guifont=PragmataPro\ 10
 set number
 " Use cursorline and fix ugly yellow
 set cursorline
@@ -340,23 +341,24 @@ let g:airline_theme = 'gruvbox'
 " let g:Powerline_symbols="fancy"
 " }}} Powerline
 
-" Syntastic {{{
-let g:syntastic_tex_chktex_showmsgs = 0
-let g:syntastic_ignore_files = ['\.py$', '\.rst$']
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-" }}} Syntastic
-"  {{{ Neomake
 if has('nvim')
+	"  {{{ Neomake
 	autocmd! BufWritePost * Neomake
+	" }}} Neomake
+else
+	" Syntastic {{{
+	let g:syntastic_tex_chktex_showmsgs = 0
+	let g:syntastic_ignore_files = ['\.py$', '\.rst$']
+	set statusline+=%#warningmsg#
+	set statusline+=%{SyntasticStatuslineFlag()}
+	set statusline+=%*
+
+	let g:syntastic_always_populate_loc_list = 1
+	let g:syntastic_auto_loc_list = 1
+	let g:syntastic_check_on_open = 1
+	let g:syntastic_check_on_wq = 0
+	" }}} Syntastic
 endif
-" }}} Neomake
 
 " VimFiler {{{
 nmap <Leader>e ::VimFiler -buffer-name=explorer
@@ -401,9 +403,6 @@ let g:pymode_rope = 0
 " let g:pymode_folding = 0
 " }}} python-mode
 
-" vim-jsx {{{
-let g:jsx_ext_required = 0
-" }}} vim-jsx
 " rainbow {{
 " let g:rainbow_active = 1
 " }} rainbow
