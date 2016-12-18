@@ -1,4 +1,5 @@
 export EDITOR='vim'
+export TERM="xterm-256color"
 
 export LANG="sv_SE.UTF-8"
 export LC_CTYPE="sv_SE.UTF-8"
