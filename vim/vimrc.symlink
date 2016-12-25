@@ -8,7 +8,8 @@ Plugin 'gmarik/vundle'
 
 Plugin 'Shougo/vimfiler.vim'
 Plugin 'Shougo/unite.vim'
-Plugin 'bling/vim-airline'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 Plugin 'skammer/vim-css-color'
 Plugin 'tpope/vim-fugitive'
 Plugin 'nathanaelkane/vim-indent-guides'
@@ -41,6 +42,7 @@ Plugin 'ervandew/supertab'
 Plugin 'guns/vim-clojure-static'
 Plugin 'tpope/vim-fireplace'
 Plugin 'heavenshell/vim-jsdoc'
+Plugin 'mnpk/vim-jira-complete'
 " Plugin 'jaxbot/github-issues.vim'
 " }}} IDE
 
@@ -319,7 +321,7 @@ let g:Tex_ImageDir = '.'
 
 " vim-airline {{{
 let g:airline_powerline_fonts = 1
-let g:airline_theme = 'gruvbox'
+let g:airline_theme = 'base16'
 " let g:airline_symbols.space = "\ua0"
 " let g:airline#extensions#tabline#enabled = 1
 " let g:airline#extensions#tabline#left_sep = ' '

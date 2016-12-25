@@ -6,7 +6,8 @@ set -g status-fg colour0
 
 bind-key Escape copy-mode
 bind-key -t vi-copy 'v' begin-selection
-bind-key -t vi-copy 'y' copy-selection
+# bind-key -t vi-copy 'y' copy-selection
+bind-key -t vi-copy 'y' copy-pipe 'xclip -in -selection clipboard'
 bind-key p paste-buffer
 
 bind C-l send-keys 'C-l'
