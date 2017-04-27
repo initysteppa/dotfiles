@@ -4,9 +4,11 @@ set -g mouse on
 set -g status-bg colour12
 set -g status-fg colour0
 
+
 bind-key Escape copy-mode
 bind-key -t vi-copy 'v' begin-selection
-bind-key -t vi-copy 'y' copy-selection
+# bind-key -t vi-copy 'y' copy-selection
+bind -t vi-copy y copy-pipe 'xclip -in -selection clipboard'
 bind-key p paste-buffer
 
 bind C-l send-keys 'C-l'
@@ -16,6 +18,7 @@ bind-key C-s split-window -v -c '#{pane_current_path}'
 bind-key C-v split-window -h -c '#{pane_current_path}'
 
 # List of plugins
+set -g @shell_mode 'vi'
 set -g @plugin 'tmux-plugins/tpm'
 set -g @plugin 'tmux-plugins/tmux-sensible'
 set -g @plugin 'christoomey/vim-tmux-navigator'
