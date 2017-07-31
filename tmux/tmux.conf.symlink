@@ -1,4 +1,4 @@
-set-window-option -g mode-keys vi
+# set-window-option -g mode-keys vi
 set -g mouse on
 
 set -g status-bg colour12
@@ -6,12 +6,18 @@ set -g status-fg colour0
 
 
 bind-key Escape copy-mode
-bind-key -t vi-copy 'v' begin-selection
-# bind-key -t vi-copy 'y' copy-selection
-bind -t vi-copy y copy-pipe 'xclip -in -selection clipboard'
+bind-key -T copy-mode-vi 'v' send-keys -X begin-selection
+# bind-key -T copy-mode-vi 'y' send-keys -X copy-selection
+bind-key -T copy-mode-vi 'y' send-keys -X copy-pipe-and-cancel 'xclip -in -selection clipboard'
 bind-key p paste-buffer
 
 bind C-l send-keys 'C-l'
+
+# resize panes like vim
+bind < resize-pane -L 10
+bind > resize-pane -R 10
+bind - resize-pane -D 10
+bind + resize-pane -U 10
 
 # bind-key C-c killp
 bind-key C-s split-window -v -c '#{pane_current_path}'
