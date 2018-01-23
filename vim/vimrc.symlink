@@ -8,8 +8,9 @@ Plugin 'gmarik/vundle'
 
 Plugin 'Shougo/vimfiler.vim'
 Plugin 'Shougo/unite.vim'
+Plugin 'Shougo/vimproc'
 Plugin 'bling/vim-airline'
-Plugin 'skammer/vim-css-color'
+Plugin 'chrisbra/Colorizer'
 Plugin 'tpope/vim-fugitive'
 Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'Konfekt/FastFold'
@@ -19,9 +20,10 @@ Plugin 'christoomey/vim-tmux-navigator'
 " IDE {{{
 Plugin 'majutsushi/tagbar'
 Plugin 'davidhalter/jedi-vim'
+Plugin 'flowtype/vim-flow'
+Plugin 'Quramy/tsuquyomi.git'
 Plugin 'klen/python-mode'
 Plugin 'neomake/neomake'
-Plugin 'benjie/neomake-local-eslint.vim'
 if has('nvim')
 	Plugin 'Shougo/deoplete.nvim'
 	Plugin 'carlitux/deoplete-ternjs'
@@ -67,8 +69,10 @@ Plugin 'digitaltoad/vim-jade'
 Plugin 'othree/html5.vim'
 Plugin 'Glench/Vim-Jinja2-Syntax'
 Plugin 'mxw/vim-jsx'
+Plugin 'ianks/vim-tsx'
 Plugin 'pangloss/vim-javascript'
 Plugin 'luochen1990/rainbow'
+Plugin 'leafgarland/typescript-vim'
 
 " }}} syntax
 
@@ -114,6 +118,9 @@ set cursorline
 " hi CursorLineNr       guifg=#8b8bcd
 
 set listchars=eol:¬,tab:→\ ,trail:~,extends:>,precedes:<
+
+set mouse=a
+set clipboard+=unnamedplus
 
 " Look for a .vim.custom when a file is opened
 au BufNewFile,BufRead *.c call CheckForCustomConfiguration()
@@ -175,6 +182,13 @@ map <silent> <A-j> <C-w>-
 map <silent> <A-k> <C-w>+
 map <silent> <A-l> <C-w>>
 
+" Switch tabs
+nnoremap <leader>bn :tabnext<CR>
+nnoremap <leader>bp :tabprev<CR>
+nnoremap <leader>bc :tabnew
+nnoremap <leader>bd :tabclose<CR>
+
+
 " Fuck you, help key.
 noremap  <F1> :set invfullscreen<CR>
 inoremap <F1> <ESC>:set invfullscreen<CR>a
@@ -188,7 +202,8 @@ set pastetoggle=<F2>
 nmap <leader>l :setlocal number!<CR>
 
 " redraw screen and clear hightlights
-noremap <silent> <c-l> :nohls<cr><c-l>
+" noremap <silent> <c-l> :nohls<cr><c-l>
+nnoremap <leader>nh :noh<cr>
 
 " Select (charwise) the contents of the current line, excluding indentation.
 " Great for pasting Python lines into REPLs.
@@ -202,6 +217,8 @@ highlight ExtraWhitespace ctermbg=red guibg=#ce4e4e
 " Show trailing whitespace except when typing on line:
 nnoremap <Leader>wn :match ExtraWhitespace /\s\+\%#\@<!$/<CR>
 nnoremap <Leader>wf :match<CR>
+
+cabbrev tabv tab sview +setlocal\ nomodifiable
 
 " Today = insert todays date
 command Today :norm! a<C-R>=strftime("%Y%m%d")<CR>
@@ -271,6 +288,15 @@ augroup ft_tex
 augroup END
 " }}} Vim
 autocmd Filetype javascript setlocal ts=2 sts=2 sw=2 expandtab
+
+augroup filetypedetect
+    au BufRead,BufNewFile Jenkinsfile set filetype=groovy
+augroup END
+autocmd FileType groovy setlocal shiftwidth=4 tabstop=4 expandtab
+autocmd FileType typescript setlocal shiftwidth=4 tabstop=4 expandtab
+
+autocmd FileType yaml setlocal shiftwidth=2 tabstop=2 expandtab
+
 " }}} Filetype-specific
 
 " Plugin settings --------------------------------------------------------- {{{
@@ -292,6 +318,11 @@ let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 let g:UltiSnipsSnippetsDir = "~/.vim/UltiSnips"
 " }}} UltiSnips
+" Neomake {{{
+let g:neomake_javascript_flow_exe = system('PATH=$(npm bin):$PATH && which flow | tr -d "\n"')
+let g:neomake_javascript_eslint_exe = system('PATH=$(npm bin):$PATH && which eslint | tr -d "\n"')
+let g:neomake_javascript_enabled_makers = ['eslint', 'flow']
+" }}} Neomake
 
 " snippets variables {{{
 let g:snips_author='Magnus Helmersson'
@@ -400,7 +431,12 @@ let g:jsdoc_input_description = 1
 
 " {{{ vim-javascript
 let g:javascript_plugin_jsdoc = 1
+let g:javascript_plugin_flow = 1
 " }}} vim-javascript
+
+" {{{ Colorizer
+let g:colorizer_auto_filetype = 'css,scss,sass,less,js,html'
+" }}} Colorizer
 
 " }}} Plugin settings
 " Mini-plugins ------------------------------------------------------------ {{{
