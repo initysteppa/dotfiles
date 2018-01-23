@@ -4,7 +4,7 @@ export ZSH=$HOME/.dotfiles
 # your project folder that we can `c [tab]` to
 export PROJECTS=~/Documents/School
 
-DEFAULT_USER="exploo"
+DEFAULT_USER="mhelmer"
 
 # use .localrc for SUPER SECRET CRAP that you don't
 # want in your public, versioned repo.
