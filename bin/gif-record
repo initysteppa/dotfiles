@@ -1,0 +1,24 @@
+#!/bin/bash
+set -e
+
+count=1
+while read line
+	do
+		x=$(echo $line | grep -oP 'x:[0-9]+' | grep -oP '[0-9]*')
+		y=$(echo $line | grep -oP 'y:[0-9]+' | grep -oP '[0-9]*')
+		if [ $count -eq 2 ]; then
+			width=$((x-left))
+			height=$((y-top))
+			echo "(x,y) = ($x,$y)"
+			break
+		else
+			top=$y
+			left=$x
+			count=$((count+1))
+			echo "(x,y) = ($x,$y)"
+		fi
+	done < <(cnee --record --mouse | awk '/7,4,0,0,1/ { system("xdotool getmouselocation") }')
+
+ffmpeg -video_size ${width}x${height} -framerate 30 -f x11grab -i :0.0+${left},${top} $1.mp4
+
+gif-enc $1.mp4 $1.gif 720
