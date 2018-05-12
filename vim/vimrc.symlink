@@ -9,8 +9,9 @@ Plugin 'gmarik/vundle'
 Plugin 'Shougo/vimfiler.vim'
 Plugin 'Shougo/unite.vim'
 Plugin 'Shougo/vimproc'
-Plugin 'bling/vim-airline'
 Plugin 'chrisbra/Colorizer'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 Plugin 'tpope/vim-fugitive'
 Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'Konfekt/FastFold'
@@ -67,6 +68,8 @@ Plugin 'kchmck/vim-coffee-script'
 Plugin 'digitaltoad/vim-jade'
 Plugin 'othree/html5.vim'
 Plugin 'Glench/Vim-Jinja2-Syntax'
+Plugin 'isRuslan/vim-es6'
+Plugin 'cakebaker/scss-syntax.vim'
 Plugin 'mxw/vim-jsx'
 Plugin 'ianks/vim-tsx'
 Plugin 'pangloss/vim-javascript'
@@ -107,10 +110,11 @@ au VimResized * :wincmd =
 set guioptions-=T
 set guioptions-=r
 set t_Co=256
+
 syntax on
 set background=dark
 colorscheme gruvbox
-set guifont=PragmataPro\ for\ Powerline\ 6
+set guifont=PragmataPro\ 10
 set number
 " Use cursorline and fix ugly yellow
 set cursorline
@@ -221,6 +225,12 @@ cabbrev tabv tab sview +setlocal\ nomodifiable
 
 " Today = insert todays date
 command Today :norm! a<C-R>=strftime("%Y%m%d")<CR>
+
+" Show color under cursor
+map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
+
 
 " }}} Convenience mappings
 
@@ -345,7 +355,7 @@ let g:Tex_ImageDir = '.'
 
 " vim-airline {{{
 let g:airline_powerline_fonts = 1
-let g:airline_theme = 'gruvbox'
+let g:airline_theme = 'base16'
 " let g:airline_symbols.space = "\ua0"
 " let g:airline#extensions#tabline#enabled = 1
 " let g:airline#extensions#tabline#left_sep = ' '
@@ -357,13 +367,29 @@ let g:airline_theme = 'gruvbox'
 " let g:Powerline_symbols="fancy"
 " }}} Powerline
 
-"  {{{ Neomake
-autocmd! BufWritePost * Neomake
-" }}} Neomake
+if has('nvim')
+	"  {{{ Neomake
+	autocmd! BufWritePost * Neomake
+	" }}} Neomake
+else
+	" Syntastic {{{
+	let g:syntastic_tex_chktex_showmsgs = 0
+	let g:syntastic_ignore_files = ['\.py$', '\.rst$']
+	set statusline+=%#warningmsg#
+	set statusline+=%{SyntasticStatuslineFlag()}
+	set statusline+=%*
+
+	let g:syntastic_always_populate_loc_list = 1
+	let g:syntastic_auto_loc_list = 1
+	let g:syntastic_check_on_open = 1
+	let g:syntastic_check_on_wq = 0
+	" }}} Syntastic
+endif
 
 " VimFiler {{{
 nmap <Leader>e ::VimFiler -buffer-name=explorer
 \ -split -simple -winwidth=35 -toggle -no-quit<CR>
+" let g:vimfiler_ignore_pattern = ['^\.git$', '^\.DS_Store$', '^\.', '.*\.(pyc|o|out|a|~)$']
 
 autocmd FileType vimfiler nmap <silent><buffer><expr> <CR> vimfiler#smart_cursor_map(
 \ "\<Plug>(vimfiler_expand_tree)",
@@ -403,6 +429,9 @@ let g:pymode_rope = 0
 " let g:pymode_folding = 0
 " }}} python-mode
 
+" rainbow {{
+" let g:rainbow_active = 1
+" }} rainbow
 " ack.vim {{{
 " open Ack
 nnoremap <leader>a :Ack
