@@ -17,6 +17,21 @@ If you're interested in the philosophy behind why projects like these are
 awesome, you might want to [read holmans post on the
 subject](http://zachholman.com/2010/08/dotfiles-are-meant-to-be-forked/).
 
+## dependencies
+
+It has a bit too many dependencies, so I have compiled a list of packages
+that can be installed via eg `apt` on Debian based distros.
+
+```bash
+sudo apt install zsh curl vim-gtk3 tmux git python-minimal python-dev \
+    python-pip python3-dev python3-pip build-essential cmake libreadline-dev \
+	zlib1g-dev libbz2-dev libsqlite3-dev libssl-dev neovim
+```
+
+The following resource can be used to set up neovim if desired
+
+https://github.com/zchee/deoplete-jedi/wiki/Setting-up-Python-for-Neovim
+
 ## install
 
 Run this:

@@ -132,6 +132,8 @@ git clone https://github.com/yyuu/pyenv.git ~/.pyenv
 git clone https://github.com/yyuu/pyenv-virtualenv.git ~/.pyenv/plugins/pyenv-virtualenv
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
+cd ~/.vim/bundle/tern_for_vim && npm install && cd -
+cd ~/.vim/bundle/YouCompleteMe && ./install.py && cd -
 
 # If we are on a mac, lets install and setup homebrew
 if [ "$(uname -s)" == "Darwin" ]
