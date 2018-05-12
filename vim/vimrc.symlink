@@ -43,7 +43,6 @@ Plugin 'ervandew/supertab'
 Plugin 'guns/vim-clojure-static'
 Plugin 'tpope/vim-fireplace'
 Plugin 'heavenshell/vim-jsdoc'
-" Plugin 'jaxbot/github-issues.vim'
 " }}} IDE
 
 " searching {{{
@@ -301,10 +300,6 @@ autocmd FileType yaml setlocal shiftwidth=2 tabstop=2 expandtab
 
 " Plugin settings --------------------------------------------------------- {{{
 
-" github-issues {{{
-source ~/.vim/github-token.vim
-" }}} github-issues
-"
 " YouCompleteMe {{{
 " make YCM compatible with UltiSnips (using supertab)
 let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
