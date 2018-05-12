@@ -22,7 +22,6 @@ Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'majutsushi/tagbar'
 Plugin 'davidhalter/jedi-vim'
 Plugin 'flowtype/vim-flow'
-Plugin 'Quramy/tsuquyomi.git'
 Plugin 'klen/python-mode'
 Plugin 'neomake/neomake'
 if has('nvim')
@@ -60,21 +59,14 @@ Plugin 'honza/vim-snippets'
 " }}} editing
 
 " syntax {{{
-Plugin 'burnettk/vim-angular'
-Plugin 'chase/vim-ansible-yaml'
-Plugin 'vim-scripts/jQuery'
 Plugin 'tpope/vim-markdown'
-Plugin 'kchmck/vim-coffee-script'
-Plugin 'digitaltoad/vim-jade'
 Plugin 'othree/html5.vim'
 Plugin 'Glench/Vim-Jinja2-Syntax'
 Plugin 'isRuslan/vim-es6'
 Plugin 'cakebaker/scss-syntax.vim'
 Plugin 'mxw/vim-jsx'
-Plugin 'ianks/vim-tsx'
 Plugin 'pangloss/vim-javascript'
 Plugin 'luochen1990/rainbow'
-Plugin 'leafgarland/typescript-vim'
 
 " }}} syntax
 
