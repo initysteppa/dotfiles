@@ -9,6 +9,10 @@ snippet @prop "@property {name} Description"
 * @prop}
 endsnippet
 
+snippet deep-log "deep console log"
+console.log(require("util").inspect(${1:variable}, false, null, true));
+endsnippet
+
 # Arrow function
 snippet => "Arrow function" i
 (${1}) => {
