@@ -14,8 +14,19 @@ zsh_prompt_status() {
 POWERLEVEL9K_CUSTOM_STATUS="zsh_prompt_status"
 POWERLEVEL9K_CUSTOM_STATUS_BACKGROUND="black"
 
+zsh_prompt_npm_package() {
+  local symbols
+  symbols=()
+  [[ -n $(find-first-up . -name package.json) ]] && symbols+=$(npm run --silent env -- echo -n '$npm_package_name')
+  [[ -n "$symbols" ]] && echo -n "$symbols"
+}
+
+POWERLEVEL9K_CUSTOM_NPM_PACKAGE="zsh_prompt_npm_package"
+POWERLEVEL9K_CUSTOM_NPM_PACKAGE_BACKGROUND="black"
+POWERLEVEL9K_CUSTOM_NPM_PACKAGE_FOREGROUND="green"
+
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context battery dir virtualenv vcs)
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context battery dir virtualenv nvm vcs)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(custom_status root_indicator background_jobs history load time)
 
 
