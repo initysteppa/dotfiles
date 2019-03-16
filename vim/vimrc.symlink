@@ -18,6 +18,7 @@ Plugin 'Konfekt/FastFold'
 Plugin 'embear/vim-localvimrc'
 Plugin 'vim-latex/vim-latex'
 Plugin 'christoomey/vim-tmux-navigator'
+" Plugin 'chrisbra/csv.vim'
 
 " IDE {{{
 Plugin 'majutsushi/tagbar'
@@ -40,10 +41,12 @@ if has('nvim')
                 \ 'jsx',
                 \ 'javascript.jsx'
 				\ ]
+	let g:tern#command = ["tern"]
+	let g:tern#arguments = ["--persistent"]
 else
 	Plugin 'Valloric/YouCompleteMe'
-	Plugin 'marijnh/tern_for_vim'
 endif
+Plugin 'marijnh/tern_for_vim'
 Plugin 'ervandew/supertab'
 Plugin 'guns/vim-clojure-static'
 Plugin 'tpope/vim-fireplace'
@@ -448,6 +451,7 @@ let g:jsx_ext_required = 0
 let g:jsdoc_enable_es6 = 1
 let g:jsdoc_allow_input_prompt = 1
 let g:jsdoc_input_description = 1
+let g:jsdoc_param_description_separator	= ' - '
 " }}} vim-jsdoc
 
 " {{{ vim-javascript
@@ -458,6 +462,10 @@ let g:javascript_plugin_flow = 1
 " {{{ Colorizer
 let g:colorizer_auto_filetype = 'css,scss,sass,less,js,html'
 " }}} Colorizer
+"
+" {{{ csv.vim
+let b:csv_arrange_align = 'l*'
+" }}}
 
 " }}} Plugin settings
 " Mini-plugins ------------------------------------------------------------ {{{
