@@ -29,7 +29,6 @@ POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context battery dir virtualenv nvm vcs)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(custom_status root_indicator background_jobs history load time)
 
-
 POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=""
 POWERLEVEL9K_MULTILINE_SECOND_PROMPT_PREFIX="%{%F{249}%}\$%{%F{default}%} "
 
