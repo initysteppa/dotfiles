@@ -306,6 +306,7 @@ augroup END
 
 autocmd FileType typescript nmap <buffer> <Leader>h : <C-u>echo tsuquyomi#hint()<CR>
 
+autocmd BufNewFile,BufRead *.ts,*.tsx set filetype=typescript.tsx
 autocmd Filetype javascript setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype typescript setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype typescript.tsx setlocal ts=2 sts=2 sw=2 expandtab
