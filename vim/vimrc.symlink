@@ -306,6 +306,7 @@ augroup END
 
 autocmd FileType typescript nmap <buffer> <Leader>h : <C-u>echo tsuquyomi#hint()<CR>
 
+autocmd BufNewFile,BufRead *.ts,*.tsx set filetype=typescript.tsx
 autocmd Filetype javascript setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype typescript setlocal ts=2 sts=2 sw=2 expandtab
 autocmd Filetype typescript.tsx setlocal ts=2 sts=2 sw=2 expandtab
@@ -340,16 +341,27 @@ let g:UltiSnipsSnippetsDir = "~/.vim/UltiSnips"
 " }}} UltiSnips
 " Neomake {{{
 let g:neomake_javascript_eslint_exe = system('PATH=$(npm bin):$PATH && which eslint | tr -d "\n"')
+let g:neomake_javascript_eslint_maker = {
+	\ 'args': ['--format=compact'],
+	\ 'errorformat': '%E%f: line %l\, col %c\, Error - %m,' .
+	\   '%W%f: line %l\, col %c\, Warning - %m,%-G,%-G%*\d problems%#',
+	\ 'cwd': getcwd(),
+	\ 'output_stream': 'stdout',
+	\ }
+
 let g:neomake_javascript_enabled_makers = ['eslint']
 
-let g:neomake_typescript_eslint_exe = system('PATH=$(npm bin):$PATH && which eslint | tr -d "\n"')
+let g:neomake_typescript_eslint_exe = g:neomake_javascript_eslint_exe
+let g:neomake_typescript_eslint_maker = g:neomake_javascript_eslint_maker
 let g:neomake_typescript_tsc_exe = system('PATH=$(npm bin):$PATH && which tsc | tr -d "\n"')
 let g:neomake_typescript_tsc_maker = {
     \ 'args': [
-    \ '--project', neomake#utils#FindGlobFile(expand('%:p:h'), 'tsconfig.json')
+    \ '--project', 'tsconfig.json',
+    \ '--noEmit'
     \ ],
     \ 'append_file': 0,
-    \ 'errorformat': '%f(%l\,%c): %m'
+    \ 'errorformat': '%f(%l\,%c): %m',
+	\ 'cwd': getcwd()
     \ }
 let g:neomake_typescript_enabled_makers = ['eslint', 'tsc']
 " }}} Neomake
